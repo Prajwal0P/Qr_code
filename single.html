@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator for a Link</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden; /* Prevent scroll bars from appearing */
+      position: relative;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.8); /* Slight transparency */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      position: relative;
+      z-index: 1; /* Ensure container is above the 3D canvas */
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #4a90e2;
+    }
+
+    label {
+      font-size: 1rem;
+      color: #666;
+      display: block;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: #4a90e2;
+      outline: none;
+      box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #357abd;
+    }
+
+    #qrcode {
+      margin-top: 20px;
+    }
+
+    .redirect-btn {
+      background-color: #28a745;
+    }
+
+    .redirect-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 400px) {
+      .container {
+        width: 90%;
+        padding: 20px;
+      }
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0; /* Send the canvas behind the container */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>QR Code Generator</h1>
+    
+    <label for="link">Enter a URL:</label>
+    <input type="text" id="link" placeholder="https://example.com">
+    
+    <button onclick="generateQRCode()">Generate QR Code</button>
+
+    <!-- Container to display the QR Code -->
+    <div id="qrcode"></div>
+
+    <!-- Redirect button -->
+    <button class="redirect-btn" onclick="redirectToMultipleQR()">QR for multiple links</button>
+  </div>
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Shader Code -->
+  <script type="x-shader/x-vertex" id="shader-vertex">
+    uniform float mRefractionRatio;
+    uniform float mFresnelBias;
+    uniform float mFresnelScale;
+    uniform float mFresnelPower;
+
+    varying vec3 vReflect;
+    varying vec3 vRefract[3];
+    varying float vReflectionFactor;
+
+    void main() {
+      vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+      vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+
+      vec3 worldNormal = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );
+
+      vec3 I = worldPosition.xyz - cameraPosition;
+
+      vReflect = reflect( I, worldNormal );
+      vRefract[0] = refract( normalize( I ), worldNormal, mRefractionRatio );
+      vRefract[1] = refract( normalize( I ), worldNormal, mRefractionRatio * 0.99 );
+      vRefract[2] = refract( normalize( I ), worldNormal, mRefractionRatio * 0.98 );
+      vReflectionFactor = mFresnelBias + mFresnelScale * pow( 1.0 + dot( normalize( I ), worldNormal ), mFresnelPower );
+
+      gl_Position = projectionMatrix * mvPosition;
+    }
+  </script> 
+
+  <script type="x-shader/x-fragment" id="shader-fragment"> 
+    uniform samplerCube tCube;
+
+    varying vec3 vReflect;
+    varying vec3 vRefract[3];
+    varying float vReflectionFactor;
+
+    void main() {
+      vec4 reflectedColor = textureCube( tCube, vec3( -vReflect.x, vReflect.yz ) );
+      vec4 refractedColor = vec4( 1.0 );
+
+      refractedColor.r = textureCube( tCube, vec3( -vRefract[0].x, vRefract[0].yz ) ).r;
+      refractedColor.g = textureCube( tCube, vec3( -vRefract[1].x, vRefract[1].yz ) ).g;
+      refractedColor.b = textureCube( tCube, vec3( -vRefract[2].x, vRefract[2].yz ) ).b;
+
+      gl_FragColor = mix( refractedColor, reflectedColor, clamp( vReflectionFactor, 0.0, 1.0 ) );
+    }
+  </script>
+
+  <script>
+    class App {
+      constructor() {
+        this.camera = new THREE.PerspectiveCamera(
+          50,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          100000
+        );
+        this.scene;
+        this.renderer;
+
+        this.spheres = [];
+
+        this.windowHalfX = window.innerWidth / 2;
+        this.windowHalfY = window.innerHeight / 2;
+
+        this.init();
+        this.animate();
+      }
+      init() {
+        this.camera.position.z = 10;
+        this.camera.position.x = -10;
+
+        const path =
+          "https://s3-us-west-2.amazonaws.com/s.cdpn.io/1147877/winter-hdri_";
+        const format = ".png";
+        const order = ["px", "nx", "py", "ny", "pz", "nz"];
+        const urls = [];
+        order.forEach(side => {
+          urls.push(`${path}${side}${format}`);
+        });
+        const textureCube = new THREE.CubeTextureLoader().load(urls);
+        textureCube.format = THREE.RGBFormat;
+
+        this.scene = new THREE.Scene();
+        this.scene.background = textureCube;
+
+        const sphereGeometry = new THREE.SphereBufferGeometry(5, 16, 16);
+        const icosaGeometry = new THREE.IcosahedronBufferGeometry(7);
+        const shader = {
+          uniforms: {
+            mRefractionRatio: { value: 1.02 },
+            mFresnelBias: { value: 0.1 },
+            mFresnelPower: { value: 2.0 },
+            mFresnelScale: { value: 1.0 },
+            tCube: { value: null }
+          },
+          vertexShader: document.querySelector("#shader-vertex").textContent,
+          fragmentShader: document.querySelector("#shader-fragment").textContent
+        };
+        const uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+
+        uniforms["tCube"].value = textureCube;
+
+        const material = new THREE.ShaderMaterial({
+          uniforms,
+          vertexShader: shader.vertexShader,
+          fragmentShader: shader.fragmentShader
+        });
+
+        const bigMesh = new THREE.Mesh(sphereGeometry, material);
+
+        this.scene.add(bigMesh);
+        this.spheres.push(bigMesh);
+
+        for (let i = 0; i < 20; i++) {
+          const mesh = new THREE.Mesh(icosaGeometry, material);
+          mesh.scale.x = mesh.scale.y = mesh.scale.z = 0.1;
+          this.scene.add(mesh);
+          this.spheres.push(mesh);
+        }
+
+        this.scene.matrixAutoUpdate = false;
+
+        this.renderer = new THREE.WebGLRenderer({ alpha: true });
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(this.renderer.domElement);
+
+        window.addEventListener("resize", this.onWindowResize.bind(this));
+      }
+
+      onWindowResize() {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      animate() {
+        requestAnimationFrame(this.animate.bind(this));
+        this.spheres.forEach((sphere, index) => {
+          const time = Date.now() * 0.001;
+          sphere.rotation.x = time + index;
+          sphere.rotation.y = time + index;
+        });
+        this.renderer.render(this.scene, this.camera);
+      }
+    }
+
+    function generateQRCode() {
+      const link = document.getElementById("link").value;
+      const qrcode = document.getElementById("qrcode");
+      qrcode.innerHTML = ""; // Clear previous QR code
+      if (link) {
+        const qr = new QRCode(qrcode, {
+          text: link,
+          width: 128,
+          height: 128,
+        });
+      } else {
+        alert("Please enter a valid URL.");
+      }
+    }
+
+    function redirectToMultipleQR() {
+      const link = document.getElementById("link").value;
+      if (link) {
+        // Redirect to your multiple QR code generator page
+        window.location.href = `multipleqr.html?link=${encodeURIComponent(link)}`;
+      } else {
+        alert("Please enter a valid URL.");
+      }
+    }
+
+    window.onload = () => {
+      new App();
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+</body>
+</html>
