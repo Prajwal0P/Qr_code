@@ -290,14 +290,10 @@
     }
 
     function redirectToMultipleQR() {
-      const link = document.getElementById("link").value;
-      if (link) {
-        // Redirect to your multiple QR code generator page
-        window.location.href = `multipleqr.html?link=${encodeURIComponent(link)}`;
-      } else {
-        alert("Please enter a valid URL.");
-      }
-    }
+  // Directly redirect to multipleqr.html
+  window.location.href = 'multipleqr.html';
+}
+
 
     window.onload = () => {
       new App();
