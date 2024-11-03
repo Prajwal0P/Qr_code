@@ -4,131 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Links</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
-            color: #212529;
-            font-family: 'Roboto', sans-serif;
-            padding: 20px;
-        }
-        .link-list {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Center logos horizontally */
-        }
-        .container-box {
-            background-color: rgba(255, 255, 255, 0.5); /* Transparent white background */
-            border-radius: 10px; /* Rounded corners */
-            padding: 20px; /* Padding inside the container */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow for the container */
-        }
-        .logo-box {
-            margin: 10px 0; /* Space between logo boxes */
-            padding: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.7); /* Border color */
-            border-radius: 10px; /* Rounded corners */
-            display: flex;
-            justify-content: center; /* Center logo */
-            align-items: center; /* Center logo */
-            transition: transform 0.3s; /* Smooth animation */
-        }
-        .logo {
-            width: 50px; /* Logo size */
-            height: 50px; /* Logo size */
-            border-radius: 50%; /* Round edges for logos */
-            transition: transform 0.3s; /* Smooth scaling on hover */
-        }
-        .logo-box:hover {
-            transform: scale(1.05); /* Scale logo box on hover */
-        }
-        .logo:hover {
-            transform: scale(1.1); /* Scale logo on hover */
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js" defer></script> <!-- Link to your JavaScript file -->
 </head>
 <body>
-
-<div class="container">
-    <h1 class="text-center text-white">Your Links</h1>
-    <div class="container-box">
-        <div class="link-list" id="linkList"></div>
+    <div class="container">
+        <h1>Your Links</h1>
+        <div id="links-container"></div>
+        <button onclick="window.location.href='index.html'">Back to Generator</button>
     </div>
-</div>
 
-<script>
-    function getQueryParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-            link1: params.get('link1'),
-            link2: params.get('link2'),
-            link3: params.get('link3'),
-            link4: params.get('link4'),
-            link5: params.get('link5'),
-            link6: params.get('link6'),
-            link7: params.get('link7')
-        };
-    }
-
-    function displayLinks() {
-        const links = getQueryParams();
-        const linkList = document.getElementById('linkList');
-        const logos = {
-            link1: {
-                url: links.link1 || "https://www.youtube.com", // Default to YouTube if no link is provided
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/yt.jpg" // YouTube logo
-            },
-            link2: {
-                url: links.link2 || "https://www.facebook.com", // Default to Facebook
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/fb.jpg" // Facebook logo
-            },
-            link3: {
-                url: links.link3 || "https://www.x.com", // Default to X
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/x.jpg"// X logo
-            },
-            link4: {
-                url: links.link4 || "https://www.instagram.com", // Default to Instagram
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/insta.jpg"// Instagram logo
-            },
-            link5: {
-                url: links.link5 || "https://www.linkedin.com", // Default to LinkedIn
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/linkedin.jpg" // LinkedIn logo
-            },
-            link6: {
-                url: links.link6 || "https://www.snapchat.com", // Default to Snapchat
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/snap.jpg" // Snapchat logo
-            },
-            link7: {
-                url: links.link7 || "https://www.tinder.com", // Default to Tinder
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/tinder.jpg" // Tinder logo
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            const links = [];
+            for (let i = 1; i <= 7; i++) {
+                const link = params.get(`link${i}`);
+                if (link) {
+                    links.push(decodeURIComponent(link));
+                }
             }
-        };
-
-        let html = '';
-
-        for (const key in links) {
-            if (links[key]) {
-                html += `
-                    <div class="logo-box">
-                        <a href="${logos[key].url}" target="_blank">
-                            <img src="${logos[key].img}" alt="${key}" class="logo">
-                        </a>
-                    </div>
-                `;
-            }
+            return links;
         }
 
-        if (html === '') {
-            html = '<p>No links found.</p>';
+        // Function to get corresponding logo for a link
+        function getLogo(link) {
+            // Mapping of links to logo filenames
+            const logoMap = {
+                'https://youtube.com': 'logos/youtube-logo.png',
+                'https://facebook.com': 'logos/facebook-logo.png',
+                'https://twitter.com': 'logos/twitter-logo.png',
+                'https://instagram.com': 'logos/instagram-logo.png',
+                'https://linkedin.com': 'logos/linkedin-logo.png',
+                'https://tiktok.com': 'logos/tiktok-logo.png',
+                'https://github.com': 'logos/github-logo.png'
+            };
+
+            // Return logo filename if it exists, otherwise return a default logo
+            return logoMap[link] || 'logos/default-logo.png'; 
         }
 
-        linkList.innerHTML = html;
-    }
+        // Function to display links and logos on the page
+        function displayLinks() {
+            const links = getQueryParams();
+            const container = document.getElementById('links-container');
 
-    // Display links when the page loads
-    displayLinks();
-</script>
+            if (links.length === 0) {
+                container.innerHTML = '<p>No links found.</p>';
+                return;
+            }
 
+            links.forEach(link => {
+                const logoSrc = getLogo(link);
+                const linkElement = document.createElement('div');
+                linkElement.className = 'link-item';
+
+                // Create the logo image element
+                const logoElement = document.createElement('img');
+                logoElement.src = logoSrc;
+                logoElement.alt = 'Logo';
+                logoElement.className = 'link-logo'; // Optional class for styling
+
+                // Create the link element
+                const anchorElement = document.createElement('a');
+                anchorElement.href = link;
+                anchorElement.target = '_blank';
+                anchorElement.textContent = link;
+
+                // Append logo and link to the link item
+                linkElement.appendChild(logoElement);
+                linkElement.appendChild(anchorElement);
+                container.appendChild(linkElement);
+            });
+        }
+
+        // Call displayLinks on page load
+        document.addEventListener('DOMContentLoaded', displayLinks);
+    </script>
 </body>
 </html>
