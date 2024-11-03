@@ -3,85 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Links</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js" defer></script> <!-- Link to your JavaScript file -->
+    <title>Links</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        .header {
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        .link-box {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            width: 35px;
+            height: 35px;
+            border-radius: 100%;
+            margin-right: 10px;
+        }
+        .link-text {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .link-text:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+
+    <h1 class="header text-center my-4">Your Links</h1>
+
     <div class="container">
-        <h1>Your Links</h1>
-        <div id="links-container"></div>
-        <button onclick="window.location.href='index.html'">Back to Generator</button>
+        <div id="linksContainer"></div>
+        <div class="text-center">
+            <a href="index.html" class="btn btn-primary">Go Back to QR Code Generator</a>
+        </div>
     </div>
 
     <script>
-        // Function to get query parameters from the URL
+        // Function to parse the URL query parameters
         function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            const links = [];
-            for (let i = 1; i <= 7; i++) {
-                const link = params.get(`link${i}`);
-                if (link) {
-                    links.push(decodeURIComponent(link));
-                }
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const regex = /([^&=]+)=([^&]*)/g;
+            let match;
+            while (match = regex.exec(queryString)) {
+                params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
             }
-            return links;
+            return params;
         }
 
-        // Function to get corresponding logo for a link
-        function getLogo(link) {
-            // Mapping of links to logo filenames
-            const logoMap = {
-                'https://youtube.com': 'logos/youtube-logo.png',
-                'https://facebook.com': 'logos/facebook-logo.png',
-                'https://twitter.com': 'logos/twitter-logo.png',
-                'https://instagram.com': 'logos/instagram-logo.png',
-                'https://linkedin.com': 'logos/linkedin-logo.png',
-                'https://tiktok.com': 'logos/tiktok-logo.png',
-                'https://github.com': 'logos/github-logo.png'
+        // Function to display the links
+        function displayLinks() {
+            const linksContainer = document.getElementById('linksContainer');
+            const params = getQueryParams();
+            
+            // Map for social media logos
+            const logos = {
+                link1: 'logos/yt.jpg',
+                link2: 'logos/fb.jpg',
+                link3: 'logos/x.jpg',
+                link4: 'logos/insta.jpg',
+                link5: 'logos/linkedin.jpg',
+                link6: 'logos/snap.jpg',
+                link7: 'logos/tinder.jpg'
             };
 
-            // Return logo filename if it exists, otherwise return a default logo
-            return logoMap[link] || 'logos/default-logo.png'; 
-        }
-
-        // Function to display links and logos on the page
-        function displayLinks() {
-            const links = getQueryParams();
-            const container = document.getElementById('links-container');
-
-            if (links.length === 0) {
-                container.innerHTML = '<p>No links found.</p>';
-                return;
+            // Loop through each link and create the display elements
+            for (let i = 1; i <= 7; i++) {
+                const linkKey = `link${i}`;
+                if (params[linkKey]) {
+                    const linkDiv = document.createElement('div');
+                    linkDiv.className = 'link-box';
+                    linkDiv.innerHTML = `
+                        <img src="${logos[linkKey]}" alt="${linkKey}" class="logo">
+                        <a href="${params[linkKey]}" class="link-text" target="_blank">${params[linkKey]}</a>
+                    `;
+                    linksContainer.appendChild(linkDiv);
+                }
             }
-
-            links.forEach(link => {
-                const logoSrc = getLogo(link);
-                const linkElement = document.createElement('div');
-                linkElement.className = 'link-item';
-
-                // Create the logo image element
-                const logoElement = document.createElement('img');
-                logoElement.src = logoSrc;
-                logoElement.alt = 'Logo';
-                logoElement.className = 'link-logo'; // Optional class for styling
-
-                // Create the link element
-                const anchorElement = document.createElement('a');
-                anchorElement.href = link;
-                anchorElement.target = '_blank';
-                anchorElement.textContent = link;
-
-                // Append logo and link to the link item
-                linkElement.appendChild(logoElement);
-                linkElement.appendChild(anchorElement);
-                container.appendChild(linkElement);
-            });
         }
 
-        // Call displayLinks on page load
-        document.addEventListener('DOMContentLoaded', displayLinks);
+        // Call the displayLinks function on page load
+        window.onload = displayLinks;
     </script>
 </body>
 </html>
