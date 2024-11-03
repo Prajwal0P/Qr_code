@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Link QR Code Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+         body {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        .header {
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group-text {
+            background-color: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 50%;
+            padding: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 0.5rem; /* Added margin to the right */
+        }
+        .logo {
+            width: 35px; /* Increase the fixed width */
+            height: 35px; /* Increase the fixed height */
+            border-radius: 100%; /* Circular logo */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            transition: transform 0.3s ease; /* Smooth transition only for transform */
+            background-color: rgba(255, 255, 255, 0.8); /* Light background color with transparency */
+            display: flex; /* Center the icon within the logo */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+
+        .logo:hover {
+            transform: scale(1.2); /* Scale up to 120% on hover */
+            /* Height remains fixed at 35px */
+        }
+
+        .btn-generate, .btn-reset, .btn-download, .btn-templates {
+            background: #ff5e62;
+            color: white;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .btn-generate:hover, .btn-reset:hover, .btn-download:hover, .btn-templates:hover {
+            background: #ff9966;
+            transform: translateY(-2px);
+        }
+        .qr-container {
+            margin-top: 30px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .qr-box {
+            border: 2px solid #ddd; /* Light gray border */
+            padding: 20px; /* Padding around the QR code */
+            border-radius: 10px; /* Rounded corners */
+            background-color: #fff; /* White background */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            text-align: center; /* Center the content */
+            width: 300px; /* Set a fixed width for the box */
+        }
+        .qr-code {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .form-control {
+            border-radius: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            color: white;
+            padding: 0.75rem 1rem;
+            transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .form-control::placeholder {
+            color: #ffffff;
+        }
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid #ff9966;
+            box-shadow: 0 0 10px rgba(255, 153, 102, 0.5);
+            outline: none;
+            transform: scale(1.02); /* Slightly enlarge on focus */
+        }
+        .input-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        /* Hide the buttons initially */
+        .hidden {
+            display: none;
+        }
+        /* New styles for the QR code box */
+        .qr-box-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 350px; /* Set a max width for the container */
+            margin: 20px auto; /* Center the container with margin */
+            display: none; /* Initially hide the container */
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px; /* Space between buttons */
+        }
+        .invalid {
+            border: 2px solid red; /* Red border for invalid inputs */
+        }
+        .glow {
+            box-shadow: 0 0 5px rgba(255, 153, 102, 0.8), 0 0 10px rgba(255, 153, 102, 0.5); /* Glow effect */
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="header text-center my-4">Multi-Link QR Code Generator</h1>
+
+    <div class="container input-container">
+
+        <!-- Input Fields -->
+        <!-- YouTube -->
+        <div class="input-group">
+            <span class="input-group-text">
+                <img src="logos/Download Youtube logo png, youtube icon transparent.jpg" alt="YouTube" class="logo">
+            </span>
+            <input type="text" id="link1" class="form-control" placeholder="Enter YouTube link" 
+            onfocus="dimElements('link1'); addGlow('link1')" 
+            onblur="validateLink('link1', 'youtube')">
+        </div>
+        
+        <!-- Facebook -->
+        <div class="input-group">
+            <span class="input-group-text">
+                <img src="logos/facebook logos vector (AI, EPS, SVG, PDF, CDR) free download.jpg" alt="Facebook" class="logo">
+            </span>
+            <input type="text" id="link2" class="form-control" placeholder="Enter Facebook link" 
+            onfocus="dimElements('link2'); addGlow('link2')" 
+            onblur="validateLink('link2', 'facebook')">
+        </div>
+        
+        <!-- X (Twitter) -->
+        <div class="input-group">
+            <span class="input-group-text">
+                <img src="logos/X Daily News (@xDaily) on X.jpg" alt="Twitter" class="logo">
+            </span>
+            <input type="text" id="link3" class="form-control" placeholder="Enter Twitter link" 
+            onfocus="dimElements('link3'); addGlow('link3')" 
+            onblur="validateLink('link3', 'twitter')">
+        </div>
+        
+        <!-- Instagram -->
+        <div class="input-group">
+            <span class="input-group-text">
+                <img src="logos/download (11).jpg" alt="Instagram" class="logo">
+            </span>
+            <input type="text" id="link4" class="form-control" placeholder="Enter Instagram link" 
+            onfocus="dimElements('link4'); addGlow('link4')" 
+            onblur="validateLink('link4', 'instagram')">
+        </div>
+        
+        <!-- LinkedIn -->
+        <div class="input-group">
+            <span class="input-group-text">
+                <img src="logos/Download Linkedin logo png, Linkedin logo transparent png, Linkedin icon transparent free png.jpg" class="logo">
+            </span>
+            <input type="text" id="link5" class="form-control" placeholder="Enter LinkedIn link" 
+            onfocus="dimElements('link5'); addGlow('link5')" 
+            onblur="validateLink('link5', 'linkedin')">
+        </div>
+
+        <!-- Snapchat -->
+        <div class="input-group">
+            <span class="input-group-text">
+                <img src="logos/Mobile app snapchat snapchat logo colored icon - Download in SVG, PNG.jpg" alt="Snapchat" class="logo">
+            </span>
+            <input type="text" id="link6" class="form-control" placeholder="Enter Snapchat link" 
+            onfocus="dimElements('link6'); addGlow('link6')" 
+            onblur="validateLink('link6', 'linkedin')">
+        </div>
+        
+        <!-- Tinder -->
+        <div class="input-group">
+            <span class="input-group-text">
+                <img src="logos/Premium Vector _ Tinder icon in paper cut style Social media icons.jpg" alt="Tinder" class="logo">
+            </span>
+            <input type="text" id="link7" class="form-control" placeholder="Enter Tinder link" 
+            onfocus="dimElements('link7'); addGlow('link7')" 
+            onblur="validateLink('link7', 'linkedin')">
+        </div>
+
+        <div class="text-center">
+            <button class="btn btn-generate" id="generateButton" onclick="generateQRCode()">Generate QR Code</button>
+            <button class="btn btn-reset" onclick="resetFields()">Reset</button>
+        </div>
+    </div>
+
+    <!-- QR Code Box Container -->
+    <div class="qr-box-container" id="qrBox">
+        <div class="qr-box">
+            <div id="qrcode" class="qr-code"></div>
+            <div class="button-container">
+                <button class="btn btn-download hidden" id="downloadButton" onclick="downloadQRCode()">Download QR Code</button>
+                <button class="btn btn-templates hidden" id="templatesButton" onclick="redirectToTemplates()">Templates</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Function to validate links
+        function validateLink(linkId, platform) {
+    const input = document.getElementById(linkId);
+    const url = input.value.trim();
+    let regex;
+
+    switch (platform) {
+        case 'youtube':
+            regex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+            break;
+        case 'facebook':
+            regex = /^(https?:\/\/)?(www\.)?(facebook\.com)\/.+$/;
+            break;
+        case 'twitter':
+            regex = /^(https?:\/\/)?(www\.)?(twitter\.com)\/.+$/;
+            break;
+        case 'instagram':
+            regex = /^(https?:\/\/)?(www\.)?(instagram\.com)\/.+$/;
+            break;
+        case 'linkedin':
+            regex = /^(https?:\/\/)?(www\.)?(linkedin\.com)\/.+$/;
+            break;
+        case 'snapchat':
+            regex = /^(https?:\/\/)?(www\.)?(snapchat\.com)\/.+$/; // Corrected
+            break;
+        case 'tinder':
+            regex = /^(https?:\/\/)?(www\.)?(tinder\.com)\/.+$/; // Corrected
+            break;
+        default:
+            regex = null;
+            break;
+    }
+
+    // Check if the input is empty
+    if (url === "") {
+        input.classList.remove('invalid'); // Remove invalid state if the field is empty
+        return; // Exit the function if there's no input
+    }
+
+    // Validate the URL
+    if (regex && regex.test(url)) {
+        input.classList.remove('invalid'); // Valid input
+    } else {
+        input.classList.add('invalid'); // Invalid input
+        input.value = ""; // Clear the input box
+        alert(`Please enter a valid ${platform.charAt(0).toUpperCase() + platform.slice(1)} link.`);
+    }
+}
+
+
+        // Function to reduce opacity of other logos and input boxes
+function dimElements(activeLinkId) {
+    const inputGroups = document.querySelectorAll('.input-group');
+    inputGroups.forEach(group => {
+        const input = group.querySelector('input');
+        const logo = group.querySelector('.logo');
+        // Reset opacity for all inputs and logos
+        input.style.opacity = '1';
+        logo.style.opacity = '1';
+    });
+
+    // Dim the active link's elements
+    const activeInputGroup = document.getElementById(activeLinkId).parentNode;
+    const activeInput = activeInputGroup.querySelector('input');
+    const activeLogo = activeInputGroup.querySelector('.logo');
+    
+    // Dim non-active elements
+    inputGroups.forEach(group => {
+        if (group !== activeInputGroup) {
+            group.querySelector('input').style.opacity = '0.3';
+            group.querySelector('.logo').style.opacity = '0.3';
+        }
+    });
+}
+
+
+        // Function to add glow effect to the active logo and input box
+        function addGlow(activeLinkId) {
+            const input = document.getElementById(activeLinkId);
+            const logo = input.previousElementSibling.querySelector('.logo');
+            input.classList.add('glow');
+            logo.classList.add('glow');
+        }
+
+        // Reset all fields and remove glow effects
+        function resetFields() {
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.value = '';
+                input.classList.remove('invalid', 'glow');
+                input.style.opacity = '1'; // Reset opacity
+                const logo = input.previousElementSibling.querySelector('.logo');
+                logo.style.opacity = '1'; // Reset logo opacity
+                logo.classList.remove('glow'); // Remove glow from logo
+            });
+            const buttonContainer = document.querySelector('.button-container');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const templatesBtn = document.getElementById('templatesBtn');
+            downloadBtn.classList.add('hidden'); // Hide the download button
+            templatesBtn.classList.add('hidden'); // Hide the templates button
+            document.getElementById('qrContainer').style.display = 'none'; // Hide QR code container
+        }
+        // Example HTML setup
+const linkInput = document.getElementById('linkInput');
+linkInput.addEventListener('blur', function() {
+    validateLink('linkInput', 'linkedin'); // Change 'linkedin' to the appropriate type
+});
+
+
+    function generateQRCode() {
+        // Get the link values from the input fields
+        const link1 = document.getElementById('link1').value;
+        const link2 = document.getElementById('link2').value;
+        const link3 = document.getElementById('link3').value;
+        const link4 = document.getElementById('link4').value;
+        const link5 = document.getElementById('link5').value;
+        const link6 = document.getElementById('link6').value;
+        const link7 = document.getElementById('link7').value;
+
+        // Check if at least one link is provided
+        if (!link1 && !link2 && !link3 && !link4 && !link5 && !link6 && !link7) {
+            alert("Please enter at least one link");
+            return;
+        }
+
+        // Construct the query parameters for the links
+        const queryParams = new URLSearchParams({
+            link1: encodeURIComponent(link1), 
+            link2: encodeURIComponent(link2),
+            link3: encodeURIComponent(link3),
+            link4: encodeURIComponent(link4),
+            link5: encodeURIComponent(link5),
+            link6: encodeURIComponent(link6),
+            link7: encodeURIComponent(link7)
+        }).toString();
+
+        // Create the full URL pointing to links.html with query parameters
+        const qrUrl = "https://Prajwal0P.github.io/Qr_code/links.html?" + queryParams;
+
+        // Clear previous QR code
+        const qrCodeElement = document.getElementById('qrcode');
+        qrCodeElement.innerHTML = ''; // Clear previous QR codes
+
+        // Generate the QR code
+        new QRCode(qrCodeElement, {
+            text: qrUrl,
+            width: 256,
+            height: 256
+        });
+    
+            // Show the QR code box and buttons after generating the QR code
+            document.getElementById('qrBox').style.display = 'flex'; // Change to flex to show
+            document.getElementById('downloadButton').classList.remove('hidden');
+            document.getElementById('templatesButton').classList.remove('hidden');
+        }
+
+        function resetFields() {
+            for (let i = 1; i <= 7; i++) {
+                document.getElementById(`link${i}`).value = '';
+            }
+            document.getElementById('qrcode').innerHTML = '';
+            
+            // Hide the QR code box and buttons when reset
+            document.getElementById('qrBox').style.display = 'none'; // Hide the QR box
+            document.getElementById('downloadButton').classList.add('hidden');
+            document.getElementById('templatesButton').classList.add('hidden');
+        }
+
+        function downloadQRCode() {
+            const canvas = document.querySelector('#qrcode canvas');
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'qrcode.png';
+            link.click();
+        }
+
+        function redirectToTemplates() {
+            window.location.href = 'templates.html';
+        }
+    </script>
+
+</body>
+</html>

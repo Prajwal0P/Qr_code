@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Page</title>
+    <style>
+        /* Navbar styling */
+        .navbar {
+            background-color: #4a90e2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #f0f4f8;
+        }
+
+        .navbar-logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Container styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4a90e2, #52a5f2);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f4f8;
+        }
+
+        #colorPicker {
+            margin-top: 20px;
+            display: none; /* Hidden initially */
+        }
+
+        input[type="color"] {
+            width: 100%;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-logo">QR Code Template</div>
+        <div>
+            <a href="index.html">Home</a>
+            <a href="multipleqr.html">Multiple QR Codes</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Your QR Code</h1>
+        <div id="qrcode"></div>
+
+        <div id="colorPicker">
+            <label for="color">Choose QR Code Color:</label>
+            <input type="color" id="color" onchange="changeColor()">
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script>
+        function getQueryParam() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('qr'); // Get the QR code URL from the query parameter
+        }
+
+        function displayQRCode() {
+            const qrImageURL = getQueryParam();
+            const qrcodeContainer = document.getElementById('qrcode');
+
+            if (qrImageURL) {
+                // Create an image element to display the QR code
+                const img = document.createElement('img');
+                img.src = qrImageURL;
+                img.alt = 'Generated QR Code';
+                img.style.width = '150px'; // Set the width of the QR code image
+                img.style.height = '150px'; // Set the height of the QR code image
+                qrcodeContainer.appendChild(img);
+
+                // Show the color picker
+                document.getElementById('colorPicker').style.display = 'block';
+            } else {
+                qrcodeContainer.innerHTML = '<p>No QR code found.</p>';
+            }
+        }
+
+        function changeColor() {
+            const color = document.getElementById('color').value;
+            const qrcodeContainer = document.getElementById('qrcode');
+            const img = qrcodeContainer.querySelector('img');
+
+            // Change the color of the QR code using CSS filter
+            if (img) {
+                img.style.filter = `invert(1) sepia(1) saturate(5) hue-rotate(${color}deg)`;
+            }
+        }
+
+        // Display QR code when the page loads
+        displayQRCode();
+    </script>
+</body>
+</html> 
