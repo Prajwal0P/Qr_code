@@ -3,101 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>My Links</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
     <style>
         body {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #ffffff;
-            font-family: 'Roboto', sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
         }
-        .header {
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        h1 {
+            text-align: center;
+            color: #333;
         }
-        .link-box {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        .link-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .link-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .link-item:hover {
+            background-color: #f9f9f9;
         }
         .logo {
-            width: 35px;
-            height: 35px;
-            border-radius: 100%;
-            margin-right: 10px;
+            width: 40px; /* Set the size of the logos */
+            height: 40px;
+            margin-right: 15px;
         }
-        .link-text {
-            color: white;
+        a {
             text-decoration: none;
-            font-size: 1.1rem;
+            color: #007bff;
+            font-size: 16px;
+            flex-grow: 1;
         }
-        .link-text:hover {
+        a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <h1 class="header text-center my-4">Your Links</h1>
-
-    <div class="container">
-        <div id="linksContainer"></div>
-        <div class="text-center">
-            <a href="index.html" class="btn btn-primary">Go Back to QR Code Generator</a>
-        </div>
-    </div>
+    <h1>My Links</h1>
+    <div class="link-container" id="linkContainer"></div>
 
     <script>
-        // Function to parse the URL query parameters
+        // Function to get query parameters
         function getQueryParams() {
-            const params = {};
-            const queryString = window.location.search.substring(1);
-            const regex = /([^&=]+)=([^&]*)/g;
-            let match;
-            while (match = regex.exec(queryString)) {
-                params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
-            }
-            return params;
+            const params = new URLSearchParams(window.location.search);
+            return {
+                link1: decodeURIComponent(params.get('link1')),
+                link2: decodeURIComponent(params.get('link2')),
+                link3: decodeURIComponent(params.get('link3')),
+                link4: decodeURIComponent(params.get('link4')),
+                link5: decodeURIComponent(params.get('link5')),
+                link6: decodeURIComponent(params.get('link6')),
+                link7: decodeURIComponent(params.get('link7'))
+            };
         }
 
-        // Function to display the links
+        // Function to display links
         function displayLinks() {
-            const linksContainer = document.getElementById('linksContainer');
-            const params = getQueryParams();
-            
-            // Map for social media logos
+            const links = getQueryParams();
+            const linkContainer = document.getElementById('linkContainer');
+
             const logos = {
-                link1: 'logos/yt.jpg',
-                link2: 'logos/fb.jpg',
-                link3: 'logos/x.jpg',
-                link4: 'logos/insta.jpg',
-                link5: 'logos/linkedin.jpg',
-                link6: 'logos/snap.jpg',
-                link7: 'logos/tinder.jpg'
+                link1: 'logos/youtube-logo.png', // Replace with actual path to your logos
+                link2: 'logos/facebook-logo.png',
+                link3: 'logos/twitter-logo.png',
+                link4: 'logos/instagram-logo.png',
+                link5: 'logos/linkedin-logo.png',
+                link6: 'logos/snapchat-logo.png',
+                link7: 'logos/tiktok-logo.png'
             };
 
-            // Loop through each link and create the display elements
-            for (let i = 1; i <= 7; i++) {
-                const linkKey = `link${i}`;
-                if (params[linkKey]) {
-                    const linkDiv = document.createElement('div');
-                    linkDiv.className = 'link-box';
-                    linkDiv.innerHTML = `
-                        <img src="${logos[linkKey]}" alt="${linkKey}" class="logo">
-                        <a href="${params[linkKey]}" class="link-text" target="_blank">${params[linkKey]}</a>
+            Object.keys(links).forEach((key, index) => {
+                if (links[key]) {
+                    const linkItem = document.createElement('div');
+                    linkItem.className = 'link-item';
+                    linkItem.innerHTML = `
+                        <img src="${logos[key]}" alt="${key}" class="logo">
+                        <a href="${links[key]}" target="_blank">${links[key]}</a>
                     `;
-                    linksContainer.appendChild(linkDiv);
+                    linkContainer.appendChild(linkItem);
                 }
-            }
+            });
         }
 
-        // Call the displayLinks function on page load
+        // Execute displayLinks on page load
         window.onload = displayLinks;
     </script>
 </body>
