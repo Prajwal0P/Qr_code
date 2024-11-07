@@ -3,36 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Template QR Code</title>
+  <title>QR Code Display with Templates</title>
   <style>
-    /* Navbar styling */
-    .navbar {
-      background-color: #4a90e2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      color: #ffffff;
-      font-size: 1rem;
-    }
-
-    .navbar a {
-      color: #ffffff;
-      text-decoration: none;
-      margin: 0 15px;
-      transition: color 0.3s;
-    }
-
-    .navbar a:hover {
-      color: #f0f4f8;
-    }
-
-    .navbar-logo {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    /* Container styling */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
@@ -41,157 +13,164 @@
       min-height: 100vh;
       margin: 0;
       background: linear-gradient(135deg, #4a90e2, #52a5f2);
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-      width: 90%;
-      max-width: 380px;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    input, button {
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    input {
-      padding: 10px;
-      margin-top: 12px;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 12px;
-      background-color: #4a90e2;
       color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-top: 10px;
-      transition: background-color 0.3s;
     }
 
-    #qrcode {
+    h1 {
+      margin: 20px 0;
+    }
+
+    .qr-section {
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
+      align-items: center;
       margin-top: 20px;
-      padding: 10px;
-      background-color: #f0f4f8;
+      width: 100%;
+      max-width: 700px;
     }
 
-    button:hover {
-      background-color: #357ABD;
+    .qr-box {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 180px;
+      min-height: 220px;
+      color: #000;
     }
 
-    .color-picker {
-      margin-top: 20px;
+    .color-picker, .image-picker {
+      margin-top: 15px;
     }
 
-    .apply-btn {
-      background-color: #ff7f50;
+    .template-image {
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      margin: 5px;
     }
 
-    .download-btn {
-      display: none;
-      margin-top: 20px;
-      background-color: #4caf50;
+    .template-image:hover {
+      border: 2px solid #ffcc00;
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="navbar-logo">QR Code Template</div>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="multipleqr.html">Multiple QR Codes</a>
+  <h1>Your QR Code Display with Templates</h1>
+  <p>Original QR code inherited from index.html</p>
+
+  <!-- Original QR Code Section -->
+  <div class="qr-section">
+    <div class="qr-box" id="originalQrBox">
+      <h4>Original QR Code</h4>
+      <div id="originalQRCode"></div>
     </div>
-  </nav>
-
-  <div class="container">
-    <h1>Modify Your QR Code</h1>
-
-    <!-- QR Code display -->
-    <div id="qrcode"></div>
-
-    <!-- Color Picker and Apply Button -->
-    <div class="color-picker">
-      <input type="color" id="colorPicker" />
-      <button class="apply-btn" onclick="applyColor()">Apply Color</button>
-    </div>
-
-    <!-- Download Button -->
-    <button id="downloadBtn" class="download-btn" onclick="downloadQRCode()">Download QR Code</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+  <!-- Color Picker for Customization -->
+  <div class="color-picker">
+    <label for="colorInput">Choose Dot Color:</label>
+    <input type="color" id="colorInput" name="color" value="#000000">
+    <button onclick="generateModifiedQRCode()">Apply Color</button>
+  </div>
 
+  <!-- Image Picker Section -->
+  <div class="image-picker">
+    <label for="imageSelect">Select Image for QR Code:</label>
+    <div>
+      <img src="https://as2.ftcdn.net/v2/jpg/05/33/87/23/1000_F_533872377_IvXJBlXRGwFW9LP34UOLBu3u4ip3FrEx.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image">
+      <img src="https://via.placeholder.com/60" class="template-image" onclick="setTemplate(this.src)" alt="Template 2">
+      <img src="https://via.placeholder.com/60/00FF00/FFFFFF?text=3" class="template-image" onclick="setTemplate(this.src)" alt="Template 3">
+    </div>
+  </div>
+
+  <!-- Modified QR Code Section -->
+  <div class="qr-section">
+    <div class="qr-box" id="modifiedQrBox">
+      <h4>Modified QR Code</h4>
+      <div id="modifiedQRCode"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    let qrImageURL = "";
-    let originalQRCode;
-
-    // Retrieve the QR code URL from the URL query string
+    // Retrieve the QR code URL from the query string passed from index.html
     const urlParams = new URLSearchParams(window.location.search);
-    const qrCodeURL = urlParams.get('qr');
+    const originalQrData = urlParams.get('qr'); // Get the QR code URL passed from index.html
 
-    // Display the original QR code on the page
-    if (qrCodeURL) {
-      const qrcodeContainer = document.getElementById("qrcode");
-      originalQRCode = new QRCode(qrcodeContainer, {
-        text: qrCodeURL, // QR code URL passed from index.html
+    // Display the original QR code
+    if (originalQrData) {
+      new QRCode(document.getElementById("originalQRCode"), {
+        text: originalQrData,
         width: 150,
         height: 150,
-        colorDark: "#333333", // Default color
+        colorDark: "#000000",
         colorLight: "#ffffff",
       });
-
-      setTimeout(() => {
-        const qrCanvas = qrcodeContainer.querySelector("canvas");
-        qrImageURL = qrCanvas.toDataURL("image/png");
-        document.getElementById("downloadBtn").style.display = "block"; // Show download button
-      }, 500);
     }
 
-    // Function to apply color to the QR code
-    function applyColor() {
-      const color = document.getElementById("colorPicker").value;
-      const qrcodeContainer = document.getElementById("qrcode");
+    // Function to generate a modified QR code with chosen color
+    function generateModifiedQRCode() {
+      const color = document.getElementById("colorInput").value;
+      const modifiedQrContainer = document.getElementById("modifiedQRCode");
+      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
-      // Clear the previous QR code
-      qrcodeContainer.innerHTML = "";
-
-      // Create a new QR code with the selected color
-      new QRCode(qrcodeContainer, {
-        text: qrCodeURL, // QR code URL passed from index.html
+      new QRCode(modifiedQrContainer, {
+        text: originalQrData,
         width: 150,
         height: 150,
-        colorDark: color, // Use the selected color
+        colorDark: color,
         colorLight: "#ffffff",
       });
-
-      // Re-update the download link with the new QR code
-      setTimeout(() => {
-        const qrCanvas = qrcodeContainer.querySelector("canvas");
-        qrImageURL = qrCanvas.toDataURL("image/png");
-      }, 500);
     }
 
-    // Function to download the current QR code
-    function downloadQRCode() {
-      const downloadLink = document.createElement("a");
-      downloadLink.href = qrImageURL;
-      downloadLink.download = "qrcode.png";
-      downloadLink.click();
+    // Function to set template image for QR Code background
+    function setTemplate(imageSrc) {
+      const modifiedQrContainer = document.getElementById("modifiedQRCode");
+      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
+
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const img = new Image();
+      img.src = imageSrc;
+
+      img.onload = () => {
+        // Set canvas size (adjust these values for desired image size)
+        const canvasWidth = 300; // New width for the canvas
+        const canvasHeight = 300; // New height for the canvas
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        // Draw the selected image, scaling it to fit the canvas
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+
+        // Draw the modified QR code on top of the image
+        const qrCodeContainer = document.createElement("div");
+        const qrCode = new QRCode(qrCodeContainer, {
+          text: originalQrData,
+          width: 120, // Adjusted QR code width for larger size
+          height: 120, // Adjusted QR code height for larger size
+          colorDark: document.getElementById("colorInput").value,
+          colorLight: "#ffffff",
+        });
+
+        setTimeout(() => {
+          const qrCodeImage = qrCodeContainer.querySelector("img");
+          const qrWidth = 120; // Increased QR code width
+          const qrHeight = 120; // Increased QR code height
+          const qrX = (canvas.width - qrWidth) / 2; // Center QR code horizontally
+          const qrY = (canvas.height - qrHeight) / 2; // Center QR code vertically
+
+          ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight); // Draw QR code on canvas
+          modifiedQrContainer.appendChild(canvas); // Add canvas to the container
+        }, 100); // Delay for QR code to load
+      };
     }
   </script>
 
