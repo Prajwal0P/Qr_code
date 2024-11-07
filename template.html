@@ -1,186 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code with Templates</title>
-  <style>
-    /* Navbar styling */
-    .navbar {
-      background-color: #4a90e2;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      color: #ffffff;
-      font-size: 1rem;
-    }
+<script>
+  // Extract QR Code URL passed from index.html
+  const urlParams = new URLSearchParams(window.location.search);
+  const qrImageURL = urlParams.get('qr'); // QR code URL passed as a query parameter
 
-    .navbar a {
-      color: #ffffff;
-      text-decoration: none;
-      margin: 0 15px;
-      transition: color 0.3s;
-    }
+  if (qrImageURL) {
+    // Show the QR code from the URL
+    const qrcodeContainer = document.getElementById('qrcode');
+    new QRCode(qrcodeContainer, {
+      text: qrImageURL, // Set the URL to the QR code text
+      width: 150,
+      height: 150,
+      colorDark: "#000000", // Default dot color
+      colorLight: "#ffffff", // Background color
+    });
+  } else {
+    // If no QR code URL is passed, show an error message
+    alert("QR code URL not found.");
+  }
 
-    .navbar a:hover {
-      color: #f0f4f8;
-    }
+  // Function to change the QR code color
+  function changeQRCodeColor() {
+    const colorInput = document.getElementById('colorInput').value;
+    const qrcodeContainer = document.getElementById('qrcode');
+    qrcodeContainer.innerHTML = ''; // Clear the existing QR code
 
-    .navbar-logo {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    /* Container styling */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #4a90e2, #52a5f2);
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-      width: 90%;
-      max-width: 380px;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    input, button {
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    input {
-      padding: 10px;
-      margin-top: 12px;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 12px;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-top: 10px;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #357ABD;
-    }
-
-    /* QR Code Box */
-    .qr-box {
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      max-width: 300px;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="navbar-logo">QR Code with Templates</div>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="multipleqr.html">Multiple QR Codes</a>
-    </div>
-  </nav>
-
-  <div class="container">
-    <h1>Inherited QR Code</h1>
-
-    <!-- QR Code Display Box -->
-    <div class="qr-box" id="qrContainer">
-      <h3>Generated QR Code</h3>
-      <div id="qrcode"></div>
-    </div>
-
-    <div>
-      <label for="colorInput">Choose Dot Color:</label>
-      <input type="color" id="colorInput" value="#000000">
-      <button onclick="changeQRCodeColor()">Apply Color</button>
-    </div>
-
-    <div>
-      <button onclick="downloadQRCode()">Download QR Code</button>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-
-  <script>
-    // Extract QR Code URL passed from index.html
-    const urlParams = new URLSearchParams(window.location.search);
-    const qrImageURL = urlParams.get('qr'); // QR code URL passed as a query parameter
-
-    // Generate QR Code from the inherited URL
     if (qrImageURL) {
-      const qrcodeContainer = document.getElementById('qrcode');
       new QRCode(qrcodeContainer, {
         text: qrImageURL,
         width: 150,
         height: 150,
-        colorDark: "#000000", // Default color
+        colorDark: colorInput, // Apply selected color
         colorLight: "#ffffff",
       });
+    }
+  }
+
+  // Function to download the QR code as an image
+  function downloadQRCode() {
+    const qrcodeCanvas = document.querySelector("#qrcode canvas");
+    if (qrcodeCanvas) {
+      const downloadLink = document.createElement('a');
+      downloadLink.href = qrcodeCanvas.toDataURL("image/png");
+      downloadLink.download = 'qrcode.png';
+      downloadLink.click();
     } else {
-      alert("QR code URL not found.");
+      alert("QR code not available for download.");
     }
-
-    // Function to change the QR code color
-    function changeQRCodeColor() {
-      const colorInput = document.getElementById('colorInput').value;
-      const qrcodeContainer = document.getElementById('qrcode');
-      qrcodeContainer.innerHTML = ''; // Clear the existing QR code
-
-      if (qrImageURL) {
-        new QRCode(qrcodeContainer, {
-          text: qrImageURL,
-          width: 150,
-          height: 150,
-          colorDark: colorInput, // Apply selected color
-          colorLight: "#ffffff",
-        });
-      }
-    }
-
-    // Function to download the QR code as an image
-    function downloadQRCode() {
-      const qrcodeCanvas = document.querySelector("#qrcode canvas");
-      if (qrcodeCanvas) {
-        const downloadLink = document.createElement('a');
-        downloadLink.href = qrcodeCanvas.toDataURL("image/png");
-        downloadLink.download = 'qrcode.png';
-        downloadLink.click();
-      } else {
-        alert("QR code not available for download.");
-      }
-    }
-  </script>
-
-</body>
-</html>
+  }
+</script>
