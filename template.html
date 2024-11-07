@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Display with Custom Color</title>
+  <title>QR Code Display</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -39,61 +39,17 @@
       min-height: 220px;
       color: #000;
     }
-
-    .color-picker {
-      margin-top: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    input[type="color"] {
-      margin-top: 10px;
-      padding: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 10px;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-      font-size: 1rem;
-    }
-
-    button:hover {
-      background-color: #357ABD;
-    }
   </style>
 </head>
 <body>
 
-  <h1>Your Inherited QR Code with Custom Color</h1>
+  <h1>Your Inherited QR Code</h1>
 
   <!-- Original QR Code Section (Inherited from index.html) -->
   <div class="qr-section">
     <div class="qr-box" id="originalQrBox">
       <h4>Original QR Code</h4>
       <div id="originalQRCode"></div>
-    </div>
-  </div>
-
-  <!-- Color Picker Section -->
-  <div class="color-picker">
-    <label for="colorInput">Choose Dot Color:</label>
-    <input type="color" id="colorInput" name="color" value="#000000">
-    <button onclick="applyColor()">Apply Color</button>
-  </div>
-
-  <!-- Modified QR Code Section -->
-  <div class="qr-section">
-    <div class="qr-box" id="modifiedQrBox">
-      <h4>Modified QR Code</h4>
-      <div id="modifiedQRCode"></div>
     </div>
   </div>
 
@@ -109,27 +65,11 @@
         text: qrCodeURL,
         width: 150,
         height: 150,
-        colorDark: "#000000", // Default color
+        colorDark: "#000000",
         colorLight: "#ffffff",
       });
     } else {
       alert("No QR code data found.");
-    }
-
-    // Function to generate the modified QR code with the selected color
-    function applyColor() {
-      const color = document.getElementById("colorInput").value;
-      const modifiedQrContainer = document.getElementById("modifiedQRCode");
-      modifiedQrContainer.innerHTML = ""; // Clear the previous modified QR code
-
-      // Generate the new modified QR code with the selected color
-      new QRCode(modifiedQrContainer, {
-        text: qrCodeURL,
-        width: 150,
-        height: 150,
-        colorDark: color, // Use the selected color for QR code dots
-        colorLight: "#ffffff",
-      });
     }
   </script>
 
