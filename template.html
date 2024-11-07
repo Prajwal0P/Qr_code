@@ -98,15 +98,6 @@
       border-radius: 10px;
     }
 
-    .color-picker {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #f7f7f7;
-      border-radius: 8px;
-      width: 80%;
-      border: 1px solid #ccc;
-    }
-
     button:hover {
       background-color: #357ABD;
     }
@@ -132,10 +123,10 @@
       <img id="originalQRCode" src="" alt="Original QR Code" style="max-width: 100%; border-radius: 10px;">
     </div>
 
-    <!-- Color Picker and Modified QR Code -->
+    <!-- Button to Change QR Code Color -->
     <div class="qrcode-box">
       <h2>Modify QR Code Color</h2>
-      <input type="color" id="colorPicker" class="color-picker" value="#333333">
+      <button id="colorChangeBtn" onclick="changeColor()">Change Color</button>
       <div id="modifiedQRCode" class="qrcode-box"></div>
     </div>
   </div>
@@ -157,6 +148,9 @@
       const modifiedQRCodeContainer = document.getElementById('modifiedQRCode');
       let modifiedQRCode;
 
+      // Default color
+      let qrColor = "#333333"; // Initial dark color
+
       // Function to generate modified QR code with selected color
       function generateModifiedQRCode(color) {
         modifiedQRCodeContainer.innerHTML = ''; // Clear previous QR code
@@ -169,14 +163,19 @@
         });
       }
 
-      // Default color
-      generateModifiedQRCode("#333333");
+      // Generate the initial modified QR code
+      generateModifiedQRCode(qrColor);
 
-      // Listen for color changes
-      document.getElementById('colorPicker').addEventListener('input', function(event) {
-        const selectedColor = event.target.value;
-        generateModifiedQRCode(selectedColor);
-      });
+      // Function to change the QR code color on button click
+      function changeColor() {
+        // Cycle through colors
+        const colors = ["#ff5733", "#33b5ff", "#4caf50", "#f39c12", "#e74c3c"];
+        qrColor = colors[Math.floor(Math.random() * colors.length)]; // Random color
+        generateModifiedQRCode(qrColor); // Regenerate QR code with new color
+      }
+
+      // Attach the color change function to the button
+      document.getElementById('colorChangeBtn').addEventListener('click', changeColor);
     } else {
       alert("No QR code data found.");
     }
