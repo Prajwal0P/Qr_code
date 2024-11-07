@@ -74,6 +74,23 @@
             border-radius: 6px;
             cursor: pointer;
         }
+
+        /* Button styling */
+        #applyColorButton {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4a90e2;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        #applyColorButton:hover {
+            background-color: #3a78c2;
+        }
     </style>
 </head>
 <body>
@@ -96,10 +113,11 @@
         <!-- Second QR Code (Color Changeable) -->
         <div id="qrcodeColorChange" class="qrcode-box"></div>
 
-        <!-- Color Picker -->
+        <!-- Color Picker and Apply Button -->
         <div id="colorPicker">
             <label for="color">Choose QR Code Color:</label>
-            <input type="color" id="color" onchange="changeColor()">
+            <input type="color" id="color">
+            <button id="applyColorButton" onclick="applyColor()">Apply Color</button>
         </div>
     </div>
 
@@ -134,7 +152,7 @@
                 imgColorChange.id = 'colorChangeQR';
                 qrcodeColorChangeContainer.appendChild(imgColorChange);
 
-                // Show the color picker
+                // Show the color picker and button
                 document.getElementById('colorPicker').style.display = 'block';
             } else {
                 document.getElementById('qrcodeOriginal').innerHTML = '<p>No QR code found.</p>';
@@ -142,7 +160,7 @@
             }
         }
 
-        function changeColor() {
+        function applyColor() {
             const color = document.getElementById('color').value;
             const imgColorChange = document.getElementById('colorChangeQR');
 
