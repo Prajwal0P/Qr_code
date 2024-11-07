@@ -94,7 +94,7 @@
     const qrText = urlParams.get('qr'); // Get the QR code text or URL from the query parameter
 
     // Default to an empty string if no query parameter is found
-    let originalQrData = qrText || '';
+    let originalQrData = qrText || 'https://example.com'; // Default fallback QR code data
 
     // Display the original QR code
     const originalQRCodeContainer = document.getElementById("originalQRCode");
@@ -120,50 +120,6 @@
         colorDark: color,
         colorLight: "#ffffff",
       });
-    }
-
-    // Function to set the template with the chosen image
-    function setTemplate(imageSrc) {
-      const modifiedQrContainer = document.getElementById("modifiedQRCode");
-      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
-
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-
-      const img = new Image();
-      img.src = imageSrc;
-
-      img.onload = () => {
-        // Set canvas size
-        const canvasWidth = 300; // Adjust these values for desired image size
-        const canvasHeight = 300; // Adjusted height for the canvas
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-
-        // Draw the selected image, scaling it to fit the canvas
-        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-
-        // Draw the modified QR code on top of the image
-        const qrCodeContainer = document.createElement("div");
-        const qrCode = new QRCode(qrCodeContainer, {
-          text: originalQrData,
-          width: 120,
-          height: 120,
-          colorDark: document.getElementById("colorInput").value,
-          colorLight: "#ffffff",
-        });
-
-        setTimeout(() => {
-          const qrCodeImage = qrCodeContainer.querySelector("img");
-          const qrWidth = 120;
-          const qrHeight = 120;
-          const qrX = (canvas.width - qrWidth) / 2; // Center QR code horizontally
-          const qrY = (canvas.height - qrHeight) / 2; // Center QR code vertically
-
-          ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight); // Draw QR code on canvas
-          modifiedQrContainer.appendChild(canvas); // Add canvas to the container
-        }, 100); // Delay for QR code to load
-      };
     }
   </script>
 </body>
