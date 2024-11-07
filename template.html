@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Code Template</title>
   <style>
+    /* Basic styling for the page */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
@@ -41,35 +42,11 @@
       min-height: 220px;
       color: #000;
     }
-
-    .color-picker {
-      margin-top: 15px;
-    }
-
-    /* Style for the input and button */
-    input[type="color"] {
-      padding: 5px;
-      margin-right: 10px;
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: #357ABD;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #4a90e2;
-    }
   </style>
 </head>
 <body>
 
-  <h1>QR Code Template</h1>
+  <h1>Your QR Code Template</h1>
   <p>Original QR code inherited from index.html</p>
 
   <!-- Original QR Code Section -->
@@ -80,53 +57,24 @@
     </div>
   </div>
 
-  <!-- Color Picker for Customization -->
-  <div class="color-picker">
-    <label for="colorInput">Choose Dot Color:</label>
-    <input type="color" id="colorInput" name="color" value="#000000">
-    <button onclick="applyColor()">Change Color</button>
-  </div>
-
-  <!-- Modified QR Code Section -->
-  <div class="qr-section">
-    <div class="qr-box" id="modifiedQrBox">
-      <h4>Modified QR Code</h4>
-      <div id="modifiedQRCode"></div>
-    </div>
-  </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <script>
-    // Get QR code URL from the query string passed from index.html
+    // Get QR code URL from query string (inherited from index.html)
     const urlParams = new URLSearchParams(window.location.search);
-    const qrCodeURL = urlParams.get('qr');
+    const qrCodeURL = urlParams.get('qr'); // qrCodeURL will be passed from index.html
 
     if (qrCodeURL) {
-      // Set the original QR code
+      // Set the original QR code image dynamically
       new QRCode(document.getElementById("originalQRCode"), {
         text: qrCodeURL,
         width: 150,
         height: 150,
-        colorDark: "#000000",  // Default dark color
-        colorLight: "#ffffff", // Light color for background
+        colorDark: "#000000",
+        colorLight: "#ffffff",
       });
-
-      // Function to apply color change to modified QR code
-      function applyColor() {
-        const color = document.getElementById("colorInput").value;
-        const modifiedQrContainer = document.getElementById("modifiedQRCode");
-        modifiedQrContainer.innerHTML = ''; // Clear previous QR code
-
-        new QRCode(modifiedQrContainer, {
-          text: qrCodeURL,
-          width: 150,
-          height: 150,
-          colorDark: color, // Use selected color for QR code dots
-          colorLight: "#ffffff", // Keep background white
-        });
-      }
     } else {
-      alert("No QR code data found.");
+      alert("No QR code URL provided.");
     }
   </script>
 
