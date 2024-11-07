@@ -163,7 +163,7 @@
     }
 
     function redirectToTemplate() {
-      // Redirect to template.html and pass the QR code URL as a parameter
+      // Ensure the QR code image URL is properly passed as a query parameter
       window.location.href = `template.html?qr=${encodeURIComponent(qrImageURL)}`;
     }
   </script>
