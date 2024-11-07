@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Template</title>
+  <title>Template QR Code</title>
   <style>
-    /* Similar styling to your index.html for consistency */
+    /* Navbar styling */
     .navbar {
       background-color: #4a90e2;
       display: flex;
@@ -32,6 +32,7 @@
       font-size: 1.2rem;
     }
 
+    /* Container styling */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
@@ -53,20 +54,17 @@
       margin-top: 20px;
     }
 
-    #qrcode-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
+    input, button {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    input {
       padding: 10px;
-      background-color: #f0f4f8;
-    }
-
-    .qrcode-box {
-      margin-top: 20px;
-    }
-
-    .color-picker {
-      margin-top: 20px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
 
     button {
@@ -81,8 +79,30 @@
       transition: background-color 0.3s;
     }
 
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f0f4f8;
+    }
+
     button:hover {
       background-color: #357ABD;
+    }
+
+    .color-picker {
+      margin-top: 20px;
+    }
+
+    .apply-btn {
+      background-color: #ff7f50;
+    }
+
+    .download-btn {
+      display: none;
+      margin-top: 20px;
+      background-color: #4caf50;
     }
   </style>
 </head>
@@ -90,7 +110,7 @@
 
   <!-- Navigation Bar -->
   <nav class="navbar">
-    <div class="navbar-logo">QR Code Generator</div>
+    <div class="navbar-logo">QR Code Template</div>
     <div>
       <a href="index.html">Home</a>
       <a href="multipleqr.html">Multiple QR Codes</a>
@@ -98,58 +118,82 @@
   </nav>
 
   <div class="container">
-    <h1>Template QR Code</h1>
-    
-    <!-- Original QR Code -->
-    <div class="qrcode-box">
-      <h3>Original QR Code:</h3>
-      <div id="original-qrcode-container"></div>
+    <h1>Modify Your QR Code</h1>
+
+    <!-- QR Code display -->
+    <div id="qrcode"></div>
+
+    <!-- Color Picker and Apply Button -->
+    <div class="color-picker">
+      <input type="color" id="colorPicker" />
+      <button class="apply-btn" onclick="applyColor()">Apply Color</button>
     </div>
 
-    <!-- Modified QR Code -->
-<div id="modifiedQRCode" style="margin-top: 20px;"></div>
-
-<!-- Color Picker and Apply Button -->
-<label for="colorPicker">Choose QR Code Color:</label>
-<input type="color" id="colorPicker">
-<button onclick="applyColor()">Apply Color</button>
-
-   
+    <!-- Download Button -->
+    <button id="downloadBtn" class="download-btn" onclick="downloadQRCode()">Download QR Code</button>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
   <script>
+    let qrImageURL = "";
+    let originalQRCode;
+
+    // Retrieve the QR code URL from the URL query string
     const urlParams = new URLSearchParams(window.location.search);
-    const qrImageURL = urlParams.get('qr'); // Get QR code image URL from query parameters
+    const qrCodeURL = urlParams.get('qr');
 
-    // Display the original QR code as an image
-    const originalQrContainer = document.getElementById("original-qrcode-container");
-    const originalQrImage = new Image();
-    originalQrImage.src = qrImageURL;
-    originalQrContainer.appendChild(originalQrImage);
+    // Display the original QR code on the page
+    if (qrCodeURL) {
+      const qrcodeContainer = document.getElementById("qrcode");
+      originalQRCode = new QRCode(qrcodeContainer, {
+        text: qrCodeURL, // QR code URL passed from index.html
+        width: 150,
+        height: 150,
+        colorDark: "#333333", // Default color
+        colorLight: "#ffffff",
+      });
 
-    // Function to generate the modified QR code with a chosen color
+      setTimeout(() => {
+        const qrCanvas = qrcodeContainer.querySelector("canvas");
+        qrImageURL = qrCanvas.toDataURL("image/png");
+        document.getElementById("downloadBtn").style.display = "block"; // Show download button
+      }, 500);
+    }
+
+    // Function to apply color to the QR code
     function applyColor() {
-  const colorPicker = document.getElementById("colorPicker");
-  const color = colorPicker.value; // Get the selected color from the color picker
-  
-  // Create a new QR code with the selected color for the dots
-  const qrcodeContainer = document.getElementById("modifiedQRCode");
+      const color = document.getElementById("colorPicker").value;
+      const qrcodeContainer = document.getElementById("qrcode");
 
-  qrcodeContainer.innerHTML = ""; // Clear the previous modified QR code
+      // Clear the previous QR code
+      qrcodeContainer.innerHTML = "";
 
-  if (qrImageURL) {
-    const modifiedQRCode = new QRCode(qrcodeContainer, {
-      text: qrImageURL, // Use the original QR code URL
-      width: 150,
-      height: 150,
-      colorDark: color, // Apply the selected color to the dots
-      colorLight: "#ffffff", // Keep the background white
-    });
-  }
-}
+      // Create a new QR code with the selected color
+      new QRCode(qrcodeContainer, {
+        text: qrCodeURL, // QR code URL passed from index.html
+        width: 150,
+        height: 150,
+        colorDark: color, // Use the selected color
+        colorLight: "#ffffff",
+      });
 
+      // Re-update the download link with the new QR code
+      setTimeout(() => {
+        const qrCanvas = qrcodeContainer.querySelector("canvas");
+        qrImageURL = qrCanvas.toDataURL("image/png");
+      }, 500);
+    }
+
+    // Function to download the current QR code
+    function downloadQRCode() {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = qrImageURL;
+      downloadLink.download = "qrcode.png";
+      downloadLink.click();
+    }
   </script>
+
 </body>
 </html>
