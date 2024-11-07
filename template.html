@@ -54,7 +54,7 @@
             margin-top: 20px;
         }
 
-        #qrcode {
+        .qrcode-box {
             display: flex;
             justify-content: center;
             margin-top: 20px;
@@ -88,9 +88,15 @@
     </nav>
 
     <div class="container">
-        <h1>Your QR Code</h1>
-        <div id="qrcode"></div>
+        <h1>Your QR Codes</h1>
+        
+        <!-- First QR Code (Original) -->
+        <div id="qrcodeOriginal" class="qrcode-box"></div>
 
+        <!-- Second QR Code (Color Changeable) -->
+        <div id="qrcodeColorChange" class="qrcode-box"></div>
+
+        <!-- Color Picker -->
         <div id="colorPicker">
             <label for="color">Choose QR Code Color:</label>
             <input type="color" id="color" onchange="changeColor()">
@@ -105,39 +111,49 @@
             return params.get('qr'); // Get the QR code URL from the query parameter
         }
 
-        function displayQRCode() {
+        function displayQRCodes() {
             const qrImageURL = getQueryParam();
-            const qrcodeContainer = document.getElementById('qrcode');
-
+            
             if (qrImageURL) {
-                // Create an image element to display the QR code
-                const img = document.createElement('img');
-                img.src = qrImageURL;
-                img.alt = 'Generated QR Code';
-                img.style.width = '150px'; // Set the width of the QR code image
-                img.style.height = '150px'; // Set the height of the QR code image
-                qrcodeContainer.appendChild(img);
+                // Display the first QR code (Original)
+                const qrcodeOriginalContainer = document.getElementById('qrcodeOriginal');
+                const imgOriginal = document.createElement('img');
+                imgOriginal.src = qrImageURL;
+                imgOriginal.alt = 'Generated QR Code';
+                imgOriginal.style.width = '150px';
+                imgOriginal.style.height = '150px';
+                qrcodeOriginalContainer.appendChild(imgOriginal);
+
+                // Display the second QR code (Color Changeable)
+                const qrcodeColorChangeContainer = document.getElementById('qrcodeColorChange');
+                const imgColorChange = document.createElement('img');
+                imgColorChange.src = qrImageURL;
+                imgColorChange.alt = 'Generated QR Code (Color Changeable)';
+                imgColorChange.style.width = '150px';
+                imgColorChange.style.height = '150px';
+                imgColorChange.id = 'colorChangeQR';
+                qrcodeColorChangeContainer.appendChild(imgColorChange);
 
                 // Show the color picker
                 document.getElementById('colorPicker').style.display = 'block';
             } else {
-                qrcodeContainer.innerHTML = '<p>No QR code found.</p>';
+                document.getElementById('qrcodeOriginal').innerHTML = '<p>No QR code found.</p>';
+                document.getElementById('qrcodeColorChange').innerHTML = '<p>No QR code found.</p>';
             }
         }
 
         function changeColor() {
             const color = document.getElementById('color').value;
-            const qrcodeContainer = document.getElementById('qrcode');
-            const img = qrcodeContainer.querySelector('img');
+            const imgColorChange = document.getElementById('colorChangeQR');
 
-            // Change the color of the QR code using CSS filter
-            if (img) {
-                img.style.filter = `invert(1) sepia(1) saturate(5) hue-rotate(${color}deg)`;
+            // Apply color change to the second QR code only
+            if (imgColorChange) {
+                imgColorChange.style.filter = `invert(1) sepia(1) saturate(5) hue-rotate(${color}deg)`;
             }
         }
 
-        // Display QR code when the page loads
-        displayQRCode();
+        // Display QR codes when the page loads
+        displayQRCodes();
     </script>
 </body>
-</html> 
+</html>
