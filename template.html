@@ -91,13 +91,19 @@
   <script>
     // Get the QR code URL from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
-    const qrImageURL = urlParams.get('qr'); // Get the QR code image URL from the query parameter
+    const qrText = urlParams.get('qr'); // Get the QR code content (original URL) from the query parameter
+
+    let qrLink = qrText || ''; // This should be the original URL used to generate the QR code
 
     // Display the original QR code
     const originalQRCodeContainer = document.getElementById("originalQRCode");
-    const originalImage = new Image();
-    originalImage.src = qrImageURL;
-    originalQRCodeContainer.appendChild(originalImage);
+    const originalQRCode = new QRCode(originalQRCodeContainer, {
+      text: qrLink,
+      width: 150,
+      height: 150,
+      colorDark: "#333333",
+      colorLight: "#ffffff",
+    });
 
     // Function to generate the modified QR code with the chosen color
     function applyColorChange() {
@@ -108,10 +114,10 @@
       // Re-generate the QR code with the selected color
       const qrCodeContainer = document.createElement("div");
       new QRCode(qrCodeContainer, {
-        text: qrImageURL,
+        text: qrLink, // Use the original link (not image URL)
         width: 150,
         height: 150,
-        colorDark: color,
+        colorDark: color, // Apply the chosen color
         colorLight: "#ffffff",
       });
 
