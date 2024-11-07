@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Display</title>
+  <title>QR Code Display with Inherited Data</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,7 +45,7 @@
 
   <h1>Your Inherited QR Code</h1>
 
-  <!-- Original QR Code Section (Inherited from index.html) -->
+  <!-- Original QR Code Section -->
   <div class="qr-section">
     <div class="qr-box" id="originalQrBox">
       <h4>Original QR Code</h4>
@@ -55,17 +55,17 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Get the QR code data from the query string (inherited from index.html)
+    // Retrieve the QR code URL from the query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const qrCodeURL = urlParams.get('qr'); // This gets the query parameter 'qr'
 
     if (qrCodeURL) {
-      // Display the original QR code
+      // Display the inherited QR code
       new QRCode(document.getElementById("originalQRCode"), {
-        text: qrCodeURL,
+        text: qrCodeURL, // Display the inherited URL in the QR code
         width: 150,
         height: 150,
-        colorDark: "#000000",
+        colorDark: "#000000", // Default color
         colorLight: "#ffffff",
       });
     } else {
