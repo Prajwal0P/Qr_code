@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customize QR Code</title>
+  <title>QR Code Customizer</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -42,29 +42,31 @@
       color: #000;
     }
 
-    .color-picker, .image-picker {
+    .color-picker {
       margin-top: 15px;
     }
 
-    .template-image {
-      width: 60px;
-      height: 60px;
+    button {
+      background-color: #4a90e2;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      border: 2px solid transparent;
-      margin: 5px;
+      font-size: 1rem;
+      margin-top: 10px;
+      transition: background-color 0.3s;
     }
 
-    .template-image:hover {
-      border: 2px solid #ffcc00;
+    button:hover {
+      background-color: #357ABD;
     }
   </style>
 </head>
 <body>
 
-  <h1>Customize Your QR Code</h1>
-  <p>Modify your QR code generated in <a href="index.html" style="color: #f0f4f8;">index.html</a></p>
+  <h1>QR Code Customizer</h1>
 
-  <!-- Original QR Code Section -->
   <div class="qr-section">
     <div class="qr-box" id="originalQrBox">
       <h4>Original QR Code</h4>
@@ -72,24 +74,12 @@
     </div>
   </div>
 
-  <!-- Color Picker for Customization -->
   <div class="color-picker">
     <label for="colorInput">Choose Dot Color:</label>
     <input type="color" id="colorInput" name="color" value="#000000">
-    <button onclick="generateModifiedQRCode()">Apply Color</button>
+    <button onclick="applyColorChange()">Apply Color</button>
   </div>
 
-  <!-- Image Picker Section -->
-  <div class="image-picker">
-    <label for="imageSelect">Select Image for QR Code:</label>
-    <div>
-      <img src="https://as2.ftcdn.net/v2/jpg/05/33/87/23/1000_F_533872377_IvXJBlXRGwFW9LP34UOLBu3u4ip3FrEx.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image">
-      <img src="https://via.placeholder.com/60" class="template-image" onclick="setTemplate(this.src)" alt="Template 2">
-      <img src="https://via.placeholder.com/60/00FF00/FFFFFF?text=3" class="template-image" onclick="setTemplate(this.src)" alt="Template 3">
-    </div>
-  </div>
-
-  <!-- Modified QR Code Section -->
   <div class="qr-section">
     <div class="qr-box" id="modifiedQrBox">
       <h4>Modified QR Code</h4>
@@ -99,83 +89,34 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Get the QR code URL from the query parameter or predefined data
-    function getQueryParam() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('qr'); // Get the QR code URL from the query parameter
-    }
-
-    // Set the original QR code data
-    const originalQrData = getQueryParam() || "https://Prajwal0P.github.io/Qr_code/links.html"; // Default to your actual data URL
+    // Get the QR code URL from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const qrImageURL = urlParams.get('qr'); // Get the QR code image URL from the query parameter
 
     // Display the original QR code
-    new QRCode(document.getElementById("originalQRCode"), {
-      text: originalQrData,
-      width: 150,
-      height: 150,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-    });
+    const originalQRCodeContainer = document.getElementById("originalQRCode");
+    const originalImage = new Image();
+    originalImage.src = qrImageURL;
+    originalQRCodeContainer.appendChild(originalImage);
 
-    // Function to generate a modified QR code with chosen color
-    function generateModifiedQRCode() {
+    // Function to generate the modified QR code with the chosen color
+    function applyColorChange() {
       const color = document.getElementById("colorInput").value;
-      const modifiedQrContainer = document.getElementById("modifiedQRCode");
-      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
+      const modifiedQRCodeContainer = document.getElementById("modifiedQRCode");
+      modifiedQRCodeContainer.innerHTML = ""; // Clear previous QR code
 
-      new QRCode(modifiedQrContainer, {
-        text: originalQrData,
+      // Re-generate the QR code with the selected color
+      const qrCodeContainer = document.createElement("div");
+      new QRCode(qrCodeContainer, {
+        text: qrImageURL,
         width: 150,
         height: 150,
         colorDark: color,
         colorLight: "#ffffff",
       });
-    }
 
-    // Function to apply a template image and generate a QR code with it
-    function setTemplate(imageSrc) {
-      const modifiedQrContainer = document.getElementById("modifiedQRCode");
-      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
-
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      
-      const img = new Image();
-      img.src = imageSrc;
-
-      img.onload = () => {
-        // Set canvas size (adjust these values for desired image size)
-        const canvasWidth = 300; // New width for the canvas
-        const canvasHeight = 300; // New height for the canvas
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-
-        // Draw the selected image, scaling it to fit the canvas
-        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-
-        // Draw the modified QR code on top of the image
-        const qrCodeContainer = document.createElement("div");
-        const qrCode = new QRCode(qrCodeContainer, {
-          text: originalQrData,
-          width: 120, // Adjusted QR code width for larger size
-          height: 120, // Adjusted QR code height for larger size
-          colorDark: document.getElementById("colorInput").value,
-          colorLight: "#ffffff",
-        });
-
-        setTimeout(() => {
-          const qrCodeImage = qrCodeContainer.querySelector("img");
-          const qrWidth = 120; // Increased QR code width
-          const qrHeight = 120; // Increased QR code height
-          const qrX = (canvas.width - qrWidth) / 2; // Center QR code horizontally
-          const qrY = (canvas.height - qrHeight) / 2; // Center QR code vertically
-
-          ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight); // Draw QR code on canvas
-          modifiedQrContainer.appendChild(canvas); // Add canvas to the container
-        }, 100); // Delay for QR code to load
-      };
+      modifiedQRCodeContainer.appendChild(qrCodeContainer);
     }
   </script>
-
 </body>
 </html>
