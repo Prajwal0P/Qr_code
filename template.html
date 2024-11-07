@@ -107,18 +107,14 @@
     </div>
 
     <!-- Modified QR Code -->
-    <div class="qrcode-box">
-      <h3>Modified QR Code:</h3>
-      <div id="modified-qrcode-container"></div>
-    </div>
+<div id="modifiedQRCode" style="margin-top: 20px;"></div>
 
-    <!-- Color Picker to modify the QR Code -->
-    <div class="color-picker">
-      <label for="colorPicker">Choose QR Code Color:</label>
-      <input type="color" id="colorPicker" value="#333333">
-      <button onclick="applyColor()">Apply Color</button>
-    </div>
-  </div>
+<!-- Color Picker and Apply Button -->
+<label for="colorPicker">Choose QR Code Color:</label>
+<input type="color" id="colorPicker">
+<button onclick="applyColor()">Apply Color</button>
+
+   
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
@@ -135,20 +131,25 @@
 
     // Function to generate the modified QR code with a chosen color
     function applyColor() {
-      const color = document.getElementById("colorPicker").value;
+  const colorPicker = document.getElementById("colorPicker");
+  const color = colorPicker.value; // Get the selected color from the color picker
+  
+  // Create a new QR code with the selected color for the dots
+  const qrcodeContainer = document.getElementById("modifiedQRCode");
 
-      const modifiedQrContainer = document.getElementById("modified-qrcode-container");
-      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
+  qrcodeContainer.innerHTML = ""; // Clear the previous modified QR code
 
-      // Generate the modified QR code with the chosen color
-      new QRCode(modifiedQrContainer, {
-        text: qrImageURL,
-        width: 150,
-        height: 150,
-        colorDark: color,
-        colorLight: "#ffffff",
-      });
-    }
+  if (qrImageURL) {
+    const modifiedQRCode = new QRCode(qrcodeContainer, {
+      text: qrImageURL, // Use the original QR code URL
+      width: 150,
+      height: 150,
+      colorDark: color, // Apply the selected color to the dots
+      colorLight: "#ffffff", // Keep the background white
+    });
+  }
+}
+
   </script>
 </body>
 </html>
