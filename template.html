@@ -124,6 +124,7 @@
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
       modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
+      // Generate the modified QR code
       new QRCode(modifiedQrContainer, {
         text: originalQrData,
         width: 150,
@@ -134,7 +135,7 @@
     }
 
     // Initial call to generate the modified QR code with default color
-    generateModifiedQRCode();
+    window.onload = generateModifiedQRCode;
   </script>
 
 </body>
