@@ -99,9 +99,12 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Get the QR code image URL from the query parameter passed from index.html
+    // Get the QR code URL from the query string
     const urlParams = new URLSearchParams(window.location.search);
-    const qrCodeURL = urlParams.get('qr');
+    const qrCodeURL = urlParams.get('qr') || "https://Prajwal0P.github.io/Qr_code/link.html"; // Fallback URL
+
+    // Log the QR code URL for debugging
+    console.log("QR Code URL:", qrCodeURL);
 
     // Display the original QR code inherited from index.html
     new QRCode(document.getElementById("originalQRCode"), {
