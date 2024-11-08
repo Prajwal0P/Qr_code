@@ -113,12 +113,12 @@
          originalContainer.appendChild(originalQR);
      }
 
-     // Generate modified QR code based on the color picker selection
+     // Generate the modified QR code with the selected color
      function generateModifiedQRCode() {
          const modifiedContainer = document.getElementById("modifiedQRCode");
          modifiedContainer.innerHTML = ""; // Clear previous QR code
 
-         new QRCode(modifiedContainer, {
+         const qrCode = new QRCode(modifiedContainer, {
              text: qrCodeURL, // Use the same URL as the original QR code
              width: 150,
              height: 150,
@@ -139,7 +139,7 @@
          img.src = imageSrc;
 
          img.onload = () => {
-             // Set canvas size (adjust these values for desired image size)
+             // Set canvas size
              const canvasWidth = 300;
              const canvasHeight = 300;
              canvas.width = canvasWidth;
@@ -148,9 +148,9 @@
              // Draw the selected image, scaling it to fit the canvas
              ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
-             // Draw the modified QR code on top of the image
+             // Create a new QR code and draw it on top of the image
              const qrCodeContainer = document.createElement("div");
-             const qrCode = new QRCode(qrCodeContainer, {
+             new QRCode(qrCodeContainer, {
                  text: qrCodeURL,
                  width: 120,
                  height: 120,
@@ -165,7 +165,8 @@
                  const qrX = (canvas.width - qrWidth) / 2; 
                  const qrY = (canvas.height - qrHeight) / 2;
 
-                 ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight); 
+                 // Draw the QR code on top of the image
+                 ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight);
                  modifiedQrContainer.appendChild(canvas); // Add canvas to the container
              }, 100); // Delay for QR code to load
          };
