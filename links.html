@@ -76,20 +76,19 @@
             const links = getQueryParams();
             const linkContainer = document.getElementById('linkContainer');
 
-           
-                const logos = {
-    link1: 'logos/yt.png',
-    link2: 'logos/fb.png',
-    link3: 'logos/x-logo.png',
-    link4: 'logos/insta.png',
-    link5: 'logos/linkedin.png',
-    link6: 'logos/snap-logo.png',
-    link7: 'logos/tinder-logo.png'
-};
-
+            // Define logo paths
+            const logos = {
+                link1: 'logos/yt.png',
+                link2: 'logos/fb.png',
+                link3: 'logos/x-logo.png',
+                link4: 'logos/insta.png',
+                link5: 'logos/linkedin.png',
+                link6: 'logos/snap-logo.png',
+                link7: 'logos/tinder-logo.png'
             };
 
-            Object.keys(links).forEach((key, index) => {
+            // Display each link with its corresponding logo
+            Object.keys(links).forEach((key) => {
                 if (links[key]) {
                     const linkItem = document.createElement('div');
                     linkItem.className = 'link-item';
