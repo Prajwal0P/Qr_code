@@ -117,7 +117,9 @@
     <p>This is the original QR Code, and the second one is changeable.</p>
 
     <!-- Display the original QR code -->
-    <div id="qrcode"></div>
+    <div id="qrcode">
+      <img src="" id="originalQR" alt="Original QR Code" />
+    </div>
 
     <!-- Display the modified QR code -->
     <div id="qrcode-modified"></div>
@@ -133,9 +135,14 @@
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
   <script>
+    // Get the QR code image URL from the query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const qrCodeURL = urlParams.get('qr');
-    
+
+    // Display the original QR code using the image URL
+    const originalQRImage = document.getElementById('originalQR');
+    originalQRImage.src = qrCodeURL;
+
     // Function to create QR Code with specified color
     function generateQRCode(containerId, qrText, colorDark) {
       return new QRCode(containerId, {
@@ -146,9 +153,6 @@
         colorLight: "#ffffff",
       });
     }
-
-    // Display the original QR code with the original color
-    generateQRCode('#qrcode', qrCodeURL, "#333333");
 
     // Display the second QR code with the default color
     generateQRCode('#qrcode-modified', qrCodeURL, "#333333");
