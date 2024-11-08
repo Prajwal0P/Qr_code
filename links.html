@@ -50,23 +50,46 @@
     </div>
 
     <script>
-        // Get the URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const links = JSON.parse(decodeURIComponent(urlParams.get('links')) || '[]');
-        const container = document.getElementById('links-container');
+        // Function to get and parse the URL parameters
+        function getLinksFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const links = urlParams.get('links');
+
+            // Check if links parameter exists and parse it as JSON
+            if (links) {
+                try {
+                    return JSON.parse(decodeURIComponent(links));
+                } catch (error) {
+                    console.error('Error parsing links:', error);
+                    return [];
+                }
+            } else {
+                return [];
+            }
+        }
 
         // Function to render the links with corresponding logos
-        function renderLinks() {
+        function renderLinks(links) {
+            const container = document.getElementById('links-container');
+            
+            // Clear the container before adding new links
+            container.innerHTML = '';
+
+            if (links.length === 0) {
+                container.innerHTML = '<p>No links found.</p>';
+                return;
+            }
+
             links.forEach(link => {
                 const linkItem = document.createElement('div');
                 linkItem.classList.add('link-item');
 
                 // Create the logo image
                 const logo = document.createElement('img');
-                logo.src = `logos/${link.platform}.png`; // Adjust this path if needed
+                logo.src = `logos/${link.platform}.png`; // Ensure the logo exists in the 'logos' folder
                 logo.alt = `${link.platform} logo`;
 
-                // Create the link
+                // Create the link element
                 const linkElement = document.createElement('a');
                 linkElement.href = link.url;
                 linkElement.target = "_blank";
@@ -81,8 +104,9 @@
             });
         }
 
-        // Render the links when the page loads
-        renderLinks();
+        // Get links from the URL and render them
+        const links = getLinksFromUrl();
+        renderLinks(links);
     </script>
 
 </body>
