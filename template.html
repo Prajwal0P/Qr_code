@@ -93,7 +93,7 @@
       </div>
       <div class="qr-code">
         <h3>Modified QR Code</h3>
-        <div id="modifiedQRCode"></div>
+        <canvas id="modifiedQRCode" width="150" height="150"></canvas>
       </div>
     </div>
 
@@ -121,11 +121,14 @@
     // Generate the modified QR code based on selected color
     function generateModifiedQRCode() {
       const color = document.getElementById("colorInput").value;
-      const modifiedQrContainer = document.getElementById("modifiedQRCode");
-      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
+      const canvas = document.getElementById("modifiedQRCode");
+
+      // Clear any previous QR code from the canvas
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Generate the modified QR code
-      new QRCode(modifiedQrContainer, {
+      new QRCode(canvas, {
         text: originalQrData,
         width: 150,
         height: 150,
