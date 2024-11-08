@@ -92,53 +92,35 @@
         <img id="originalQRCode" src="" alt="Original QR Code" width="150" height="150">
       </div>
       <div class="qr-code">
-        <h3>Modified QR Code</h3>
-        <canvas id="modifiedQRCode" width="150" height="150"></canvas>
+        <h3>Second QR Code</h3>
+        <img id="secondQRCode" src="" alt="Second QR Code" width="150" height="150">
       </div>
     </div>
 
     <div class="color-picker">
-      <label for="colorInput">Choose QR Code Color:</label>
-      <input type="color" id="colorInput" value="#333333">
-      <button onclick="generateModifiedQRCode()">Apply Color</button>
+      <label for="colorPicker">Choose QR Code Color:</label>
+      <input type="color" id="colorPicker" value="#333333">
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
   <script>
     // Retrieve QR code image URL from query parameters
     const urlParams = new URLSearchParams(window.location.search);
     const qrCodeURL = urlParams.get('qr');
 
-    // Set the source of the original QR code
+    // Set the source of the QR code images
     document.getElementById("originalQRCode").src = qrCodeURL;
+    document.getElementById("secondQRCode").src = qrCodeURL;
 
-    // Store the original QR code data for later use
-    const originalQrData = qrCodeURL;
+    // Add event listener for the color picker (only affects the second QR code)
+    document.getElementById("colorPicker").addEventListener("input", function(event) {
+      const selectedColor = event.target.value;
 
-    // Generate the modified QR code based on selected color
-    function generateModifiedQRCode() {
-      const color = document.getElementById("colorInput").value;
-      const canvas = document.getElementById("modifiedQRCode");
-
-      // Clear any previous QR code from the canvas
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Generate the modified QR code
-      new QRCode(canvas, {
-        text: originalQrData,
-        width: 150,
-        height: 150,
-        colorDark: color,
-        colorLight: "#ffffff",
-      });
-    }
-
-    // Initial call to generate the modified QR code with default color
-    window.onload = generateModifiedQRCode;
+      // Apply the selected color to the second QR code
+      const secondQRCode = document.getElementById("secondQRCode");
+      secondQRCode.style.filter = `invert(30%) sepia(80%) saturate(150%) hue-rotate(150deg)`;
+      secondQRCode.style.borderColor = selectedColor;
+    });
   </script>
 
 </body>
