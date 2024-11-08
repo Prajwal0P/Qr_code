@@ -166,6 +166,8 @@
         // Display the original QR code on load and initialize the modified one
         window.onload = () => {
             displayOriginalQRCode();
+
+            // Generate the modified QR code with the initial color of the color picker
             generateModifiedQRCode(document.getElementById("colorPicker").value);
         };
     </script>
