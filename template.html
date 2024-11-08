@@ -112,18 +112,14 @@
     document.getElementById("originalQRCode").src = qrCodeURL;
     document.getElementById("secondQRCode").src = qrCodeURL;
 
-    // Add event listener for the color picker
+    // Add event listener for the color picker (only affects the second QR code)
     document.getElementById("colorPicker").addEventListener("input", function(event) {
       const selectedColor = event.target.value;
-      
-      // Change the color of the QR code dots
-      const qrCodes = document.querySelectorAll(".qr-code img");
-      qrCodes.forEach(qrCode => {
-        qrCode.style.filter = `invert(30%) sepia(80%) saturate(150%) hue-rotate(150deg)`;
-        qrCode.style.filter = `invert(30%) sepia(80%) saturate(150%) hue-rotate(150deg)`;
-        qrCode.style.borderColor = selectedColor;
-        qrCode.style.border = "3px solid #333";
-      });
+
+      // Apply the selected color to the second QR code
+      const secondQRCode = document.getElementById("secondQRCode");
+      secondQRCode.style.filter = `invert(30%) sepia(80%) saturate(150%) hue-rotate(150deg)`;
+      secondQRCode.style.borderColor = selectedColor;
     });
   </script>
 
