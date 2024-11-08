@@ -137,7 +137,7 @@
         const qrLink = `https://Prajwal0P.github.io/Qr_code/link.html?link=${encodeURIComponent(link)}`;
         
         const qrCode = new QRCode(qrcodeContainer, {
-          text: qrLink, // Use the QR link that redirects to link.html
+          text: qrLink, // QR link with the URL as a query parameter
           width: 150,
           height: 150,
           colorDark: "#333333",
@@ -163,7 +163,7 @@
     }
 
     function redirectToTemplate() {
-      // Ensure the QR code image URL is properly passed as a query parameter
+      // Redirect to template.html with the QR code image URL as a query parameter
       window.location.href = `template.html?qr=${encodeURIComponent(qrImageURL)}`;
     }
   </script>
