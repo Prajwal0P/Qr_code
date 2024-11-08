@@ -66,18 +66,9 @@
       margin: 10px;
     }
 
-    .template-btn {
-      background-color: #ff7f50;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
+    /* Color picker styling */
+    .color-picker {
       margin-top: 20px;
-    }
-
-    button:hover {
-      background-color: #357ABD;
     }
   </style>
 </head>
@@ -106,7 +97,10 @@
       </div>
     </div>
 
-    <button id="templateBtn" class="template-btn" onclick="changeQRCodeColor()">Change QR Code Color</button>
+    <div class="color-picker">
+      <label for="colorPicker">Choose QR Code Color:</label>
+      <input type="color" id="colorPicker" value="#333333">
+    </div>
   </div>
 
   <script>
@@ -118,13 +112,19 @@
     document.getElementById("originalQRCode").src = qrCodeURL;
     document.getElementById("secondQRCode").src = qrCodeURL;
 
-    // Function to change the QR code color (for demonstration)
-    function changeQRCodeColor() {
+    // Add event listener for the color picker
+    document.getElementById("colorPicker").addEventListener("input", function(event) {
+      const selectedColor = event.target.value;
+      
+      // Change the color of the QR code dots
       const qrCodes = document.querySelectorAll(".qr-code img");
       qrCodes.forEach(qrCode => {
-        qrCode.style.filter = "invert(30%) sepia(80%) saturate(150%) hue-rotate(150deg)";
+        qrCode.style.filter = `invert(30%) sepia(80%) saturate(150%) hue-rotate(150deg)`;
+        qrCode.style.filter = `invert(30%) sepia(80%) saturate(150%) hue-rotate(150deg)`;
+        qrCode.style.borderColor = selectedColor;
+        qrCode.style.border = "3px solid #333";
       });
-    }
+    });
   </script>
 
 </body>
