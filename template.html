@@ -63,13 +63,39 @@
             border-radius: 8px;
         }
 
-        input[type="color"] {
-            width: 100%;
-            padding: 8px;
-            border: none;
-            border-radius: 8px;
+        /* Color picker styling */
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-top: 15px;
+        }
+
+        #colorPicker {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 60px;
+            height: 60px;
+            border: none;
+            border-radius: 50%;
             cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #colorPicker:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #colorPicker:focus {
+            outline: 2px solid #4a90e2;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #333;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -91,7 +117,10 @@
         <div id="originalQR"></div>
 
         <h3>Customize QR Code Color</h3>
-        <input type="color" id="colorPicker" value="#333333">
+        <div class="color-picker-container">
+            <label for="colorPicker">Select Color:</label>
+            <input type="color" id="colorPicker" value="#333333">
+        </div>
 
         <h3>Modified QR Code</h3>
         <div id="modifiedQR"></div>
