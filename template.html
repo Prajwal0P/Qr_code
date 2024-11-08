@@ -127,26 +127,31 @@
 
   <script>
     let qrImageURL = "";
+    let qrCodeURL = "";
 
     // Get the QR code URL from the query parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const qrCodeURL = urlParams.get('qr');
+    qrCodeURL = urlParams.get('qr');
     
     if (qrCodeURL) {
       // Display the QR code from the URL parameter
       const qrcodeContainer = document.getElementById("qrcode");
 
       const qrCode = new QRCode(qrcodeContainer, {
-        text: qrCodeURL,
+        text: qrCodeURL, // Use the URL of the QR code
         width: 150,
         height: 150,
-        colorDark: "#333333",
-        colorLight: "#ffffff",
+        colorDark: "#333333", // Default dark color
+        colorLight: "#ffffff", // Light color for background
       });
 
       // Set the generated QR code image URL
       const qrCanvas = qrcodeContainer.querySelector("canvas");
-      qrImageURL = qrCanvas.toDataURL("image/png");
+      if (qrCanvas) {
+        qrImageURL = qrCanvas.toDataURL("image/png");
+      }
+    } else {
+      alert("No QR code URL found.");
     }
 
     // Update QR code color based on the color picker
@@ -159,8 +164,8 @@
         text: qrCodeURL,
         width: 150,
         height: 150,
-        colorDark: color,
-        colorLight: "#ffffff",
+        colorDark: color, // Use selected color for dark part of the QR code
+        colorLight: "#ffffff", // Light color for background
       });
 
       const qrCanvas = qrcodeContainer.querySelector("canvas");
