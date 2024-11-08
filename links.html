@@ -58,75 +58,59 @@
 </div>
 
 <script>
+    // Function to retrieve query parameters and parse links
     function getQueryParams() {
         const params = new URLSearchParams(window.location.search);
         return {
-            link1: params.get('link1'),
-            link2: params.get('link2'),
-            link3: params.get('link3'),
-            link4: params.get('link4'),
-            link5: params.get('link5'),
-            link6: params.get('link6'),
-            link7: params.get('link7')
+            youtube: params.get('youtube'),
+            facebook: params.get('facebook'),
+            twitter: params.get('twitter'),
+            instagram: params.get('instagram'),
+            linkedin: params.get('linkedin'),
+            snapchat: params.get('snapchat'),
+            tinder: params.get('tinder')
         };
     }
 
+    // Function to display the links with their logos
     function displayLinks() {
         const links = getQueryParams();
         const linkList = document.getElementById('linkList');
+        
         const logos = {
-            link1: {
-                url: links.link1 || "https://www.youtube.com", // Default to YouTube if no link is provided
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download Youtube logo png, youtube icon transparent.jpg" // YouTube logo
-            },
-            link2: {
-                url: links.link2 || "https://www.facebook.com", // Default to Facebook
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos//facebook logos vector (AI, EPS, SVG, PDF, CDR) free download.jpg" // Facebook logo
-            },
-            link3: {
-                url: links.link3 || "https://www.x.com", // Default to X
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos//X Daily News (@xDaily) on X.jpg"// X logo
-            },
-            link4: {
-                url: links.link4 || "https://www.instagram.com", // Default to Instagram
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download (11).jpg"// Instagram logo
-            },
-            link5: {
-                url: links.link5 || "https://www.linkedin.com", // Default to LinkedIn
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download Linkedin logo png, Linkedin logo transparent png, Linkedin icon transparent free png.jpg" // LinkedIn logo
-            },
-            link6: {
-                url: links.link6 || "https://www.snapchat.com", // Default to Snapchat
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile app snapchat snapchat logo colored icon - Download in SVG, PNG.jpg" // Snapchat logo
-            },
-            link7: {
-                url: links.link7 || "https://www.tinder.com", // Default to Tinder
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium Vector _ Tinder icon in paper cut style Social media icons.jpg" // Tinder logo
-            }
+            youtube: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Youtube%20logo%20png%2C%20youtube%20icon%20transparent.jpg",
+            facebook: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook%20logos%20vector%20%28AI%2C%20EPS%2C%20SVG%2C%20PDF%2C%20CDR%29%20free%20download.jpg",
+            twitter: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/X%20Daily%20News%20%28@xDaily%29%20on%20X.jpg",
+            instagram: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download%20%2811%29.jpg",
+            linkedin: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Linkedin%20logo%20png%2C%20Linkedin%20logo%20transparent%20png%2C%20Linkedin%20icon%20transparent%20free%20png.jpg",
+            snapchat: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile%20app%20snapchat%20snapchat%20logo%20colored%20icon%20-%20Download%20in%20SVG%2C%20PNG.jpg",
+            tinder: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium%20Vector%20_%20Tinder%20icon%20in%20paper%20cut%20style%20Social%20media%20icons.jpg"
         };
 
         let html = '';
 
-        for (const key in links) {
-            if (links[key]) {
+        // Loop through each platform and display the link if provided
+        for (const platform in links) {
+            if (links[platform]) {
                 html += `
                     <div class="logo-box">
-                        <a href="${logos[key].url}" target="_blank">
-                            <img src="${logos[key].img}" alt="${key}" class="logo">
+                        <a href="${links[platform]}" target="_blank">
+                            <img src="${logos[platform]}" alt="${platform}" class="logo">
                         </a>
                     </div>
                 `;
             }
         }
 
-        if (html === '') {
-            html = '<p>No links found.</p>';
+        // If no links are found, display a message
+        if (!html) {
+            html = '<p class="text-white">No links found. Please make sure to generate a valid QR code.</p>';
         }
 
         linkList.innerHTML = html;
     }
 
-    // Display links when the page loads
+    // Call the function to display the links when the page loads
     displayLinks();
 </script>
 
