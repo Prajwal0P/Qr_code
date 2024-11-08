@@ -68,7 +68,7 @@
   <div class="qr-section">
     <div class="qr-box" id="originalQrBox">
       <h4>Original QR Code</h4>
-      <div id="originalQRCode"></div>
+      <div id="originalQRCodeContainer"></div>
     </div>
   </div>
 
@@ -99,22 +99,20 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-     // Retrieve QR code image URL from query parameters
-     const urlParams = new URLSearchParams(window.location.search);
+    // Retrieve QR code image URL from query parameters
+    const urlParams = new URLSearchParams(window.location.search);
     const qrCodeURL = urlParams.get('qr');
 
-    // Set the source of the QR code images
-    document.getElementById("originalQRCode").src = qrCodeURL;
-    document.getElementById("secondQRCode").src = qrCodeURL;
-
     // Display the original QR code
-    new QRCode(document.getElementById("originalQRCode"), {
-      text: originalQrData,
-      width: 150,
-      height: 150,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-    });
+    if (qrCodeURL) {
+      new QRCode(document.getElementById("originalQRCodeContainer"), {
+        text: qrCodeURL,
+        width: 150,
+        height: 150,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+      });
+    }
 
     // Function to generate a modified QR code with chosen color
     function generateModifiedQRCode() {
@@ -123,56 +121,52 @@
       modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
       new QRCode(modifiedQrContainer, {
-        text: originalQrData,
+        text: qrCodeURL,
         width: 150,
         height: 150,
         colorDark: color,
         colorLight: "#ffffff",
       });
     }
+
+    // Function to set a background template for the modified QR code
     function setTemplate(imageSrc) {
-  const modifiedQrContainer = document.getElementById("modifiedQRCode");
-  modifiedQrContainer.innerHTML = ""; // Clear previous QR code
+      const modifiedQrContainer = document.getElementById("modifiedQRCode");
+      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  
-  const img = new Image();
-  img.src = imageSrc;
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
 
-  img.onload = () => {
-    // Set canvas size (adjust these values for desired image size)
-    const canvasWidth = 300; // New width for the canvas
-    const canvasHeight = 300; // New height for the canvas
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+      const img = new Image();
+      img.src = imageSrc;
 
-    // Draw the selected image, scaling it to fit the canvas
-    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+      img.onload = () => {
+        const canvasWidth = 300; 
+        const canvasHeight = 300;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
 
-    // Draw the modified QR code on top of the image
-    const qrCodeContainer = document.createElement("div");
-    const qrCode = new QRCode(qrCodeContainer, {
-      text: originalQrData,
-      width: 120, // Adjusted QR code width for larger size
-      height: 120, // Adjusted QR code height for larger size
-      colorDark: document.getElementById("colorInput").value,
-      colorLight: "#ffffff",
-    });
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
-    setTimeout(() => {
-      const qrCodeImage = qrCodeContainer.querySelector("img");
-      const qrWidth = 120; // Increased QR code width
-      const qrHeight = 120; // Increased QR code height
-      const qrX = (canvas.width - qrWidth) / 2; // Center QR code horizontally
-      const qrY = (canvas.height - qrHeight) / 2; // Center QR code vertically
+        const qrCodeContainer = document.createElement("div");
+        const qrCode = new QRCode(qrCodeContainer, {
+          text: qrCodeURL,
+          width: 120,
+          height: 120,
+          colorDark: document.getElementById("colorInput").value,
+          colorLight: "#ffffff",
+        });
 
-      ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight); // Draw QR code on canvas
-      modifiedQrContainer.appendChild(canvas); // Add canvas to the container
-    }, 100); // Delay for QR code to load
-  };
-}
+        setTimeout(() => {
+          const qrCodeImage = qrCodeContainer.querySelector("img");
+          const qrX = (canvas.width - qrCodeImage.width) / 2;
+          const qrY = (canvas.height - qrCodeImage.height) / 2;
 
+          ctx.drawImage(qrCodeImage, qrX, qrY);
+          modifiedQrContainer.appendChild(canvas);
+        }, 100);
+      };
+    }
   </script>
 
 </body>
