@@ -15,20 +15,8 @@
       background: linear-gradient(135deg, #4a90e2, #52a5f2);
       color: white;
     }
-
-    h1 {
-      margin: 20px 0;
-    }
-
-    .qr-section {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      margin-top: 20px;
-      width: 100%;
-      max-width: 700px;
-    }
-
+    h1 { margin: 20px 0; }
+    .qr-section { display: flex; justify-content: space-around; align-items: center; margin-top: 20px; width: 100%; max-width: 700px; }
     .qr-box {
       background-color: #fff;
       border-radius: 10px;
@@ -41,22 +29,9 @@
       min-height: 220px;
       color: #000;
     }
-
-    .color-picker, .image-picker {
-      margin-top: 15px;
-    }
-
-    .template-image {
-      width: 60px;
-      height: 60px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      margin: 5px;
-    }
-
-    .template-image:hover {
-      border: 2px solid #ffcc00;
-    }
+    .color-picker, .image-picker { margin-top: 15px; }
+    .template-image { width: 60px; height: 60px; cursor: pointer; border: 2px solid transparent; margin: 5px; }
+    .template-image:hover { border: 2px solid #ffcc00; }
   </style>
 </head>
 <body>
@@ -103,7 +78,10 @@
     const urlParams = new URLSearchParams(window.location.search);
     const qrCodeURL = urlParams.get('qr');
 
-    // Display the original QR code
+    // Verify if the URL was properly retrieved
+    console.log("QR Code URL:", qrCodeURL);
+
+    // Display the original QR code if the URL is available
     if (qrCodeURL) {
       new QRCode(document.getElementById("originalQRCodeContainer"), {
         text: qrCodeURL,
@@ -112,6 +90,8 @@
         colorDark: "#000000",
         colorLight: "#ffffff",
       });
+    } else {
+      console.error("No QR code URL found in query parameters.");
     }
 
     // Function to generate a modified QR code with chosen color
@@ -120,13 +100,17 @@
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
       modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
-      new QRCode(modifiedQrContainer, {
-        text: qrCodeURL,
-        width: 150,
-        height: 150,
-        colorDark: color,
-        colorLight: "#ffffff",
-      });
+      if (qrCodeURL) {
+        new QRCode(modifiedQrContainer, {
+          text: qrCodeURL,
+          width: 150,
+          height: 150,
+          colorDark: color,
+          colorLight: "#ffffff",
+        });
+      } else {
+        console.error("QR Code URL is missing; cannot generate modified QR code.");
+      }
     }
 
     // Function to set a background template for the modified QR code
