@@ -1,64 +1,118 @@
-<script>
-    // Function to get and parse the URL parameters
-    function getLinksFromUrl() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const links = urlParams.get('links');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .link-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .link-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+        }
+        .link-item a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .link-item a:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
 
-        // Log the raw links parameter to see what's being received
-        console.log('Raw links parameter:', links);
+    <div class="container">
+        <h1>Links</h1>
+        <div id="links-container"></div>
+    </div>
 
-        // Check if links parameter exists and parse it as JSON
-        if (links) {
-            try {
-                const parsedLinks = JSON.parse(decodeURIComponent(links));
-                console.log('Parsed links:', parsedLinks);
-                return parsedLinks;
-            } catch (error) {
-                console.error('Error parsing links:', error);
+    <script>
+        // Function to get and parse the URL parameters
+        function getLinksFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const links = urlParams.get('links');
+
+            // Log the raw links parameter to see what's being received
+            console.log('Raw links parameter:', links);
+
+            // Check if links parameter exists and parse it as JSON
+            if (links) {
+                try {
+                    const parsedLinks = JSON.parse(decodeURIComponent(links));
+                    console.log('Parsed links:', parsedLinks);
+                    return parsedLinks;
+                } catch (error) {
+                    console.error('Error parsing links:', error);
+                    return [];
+                }
+            } else {
                 return [];
             }
-        } else {
-            return [];
-        }
-    }
-
-    // Function to render the links with corresponding logos
-    function renderLinks(links) {
-        const container = document.getElementById('links-container');
-         
-        // Clear the container before adding new links
-        container.innerHTML = '';
-
-        if (links.length === 0) {
-            container.innerHTML = '<p>No links found.</p>';
-            return;
         }
 
-        links.forEach(link => {
-            const linkItem = document.createElement('div');
-            linkItem.classList.add('link-item');
+        // Function to render the links with corresponding logos
+        function renderLinks(links) {
+            const container = document.getElementById('links-container');
+            
+            // Clear the container before adding new links
+            container.innerHTML = '';
 
-            // Create the logo image
-            const logo = document.createElement('img');
-            logo.src = `logos/${link.platform}.png`; // Ensure the logo exists in the 'logos' folder
-            logo.alt = `${link.platform} logo`;
+            if (links.length === 0) {
+                container.innerHTML = '<p>No links found.</p>';
+                return;
+            }
 
-            // Create the link element
-            const linkElement = document.createElement('a');
-            linkElement.href = link.url;
-            linkElement.target = "_blank";
-            linkElement.textContent = link.url;
+            links.forEach(link => {
+                const linkItem = document.createElement('div');
+                linkItem.classList.add('link-item');
 
-            // Append logo and link to the link item
-            linkItem.appendChild(logo);
-            linkItem.appendChild(linkElement);
+                // Create the logo image
+                const logo = document.createElement('img');
+                logo.src = `logos/${link.platform}.png`; // Ensure the logo exists in the 'logos' folder
+                logo.alt = `${link.platform} logo`;
 
-            // Append the link item to the container
-            container.appendChild(linkItem);
-        });
-    }
+                // Create the link element
+                const linkElement = document.createElement('a');
+                linkElement.href = link.url;
+                linkElement.target = "_blank";
+                linkElement.textContent = link.url;
 
-    // Get links from the URL and render them
-    const links = getLinksFromUrl();
-    renderLinks(links);
-</script>
+                // Append logo and link to the link item
+                linkItem.appendChild(logo);
+                linkItem.appendChild(linkElement);
+
+                // Append the link item to the container
+                container.appendChild(linkItem);
+            });
+        }
+
+        // Get links from the URL and render them
+        const links = getLinksFromUrl();
+        renderLinks(links);
+    </script>
+
+</body>
+</html>
