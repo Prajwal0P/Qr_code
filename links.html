@@ -3,116 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Links</title>
+    <title>Multi-Link QR Code Generator - Links</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
-            color: #212529;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #ffffff;
             font-family: 'Roboto', sans-serif;
+        }
+        .header {
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        .qr-container {
+            margin-top: 30px;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .qr-box {
+            border: 2px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+        .qr-code {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         .link-list {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Center logos horizontally */
-        }
-        .container-box {
-            background-color: rgba(255, 255, 255, 0.5); /* Transparent white background */
-            border-radius: 10px; /* Rounded corners */
-            padding: 20px; /* Padding inside the container */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow for the container */
-        }
-        .logo-box {
-            margin: 10px 0; /* Space between logo boxes */
+            margin-top: 30px;
             padding: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.7); /* Border color */
-            border-radius: 10px; /* Rounded corners */
-            display: flex;
-            justify-content: center; /* Center logo */
-            align-items: center; /* Center logo */
-            transition: transform 0.3s; /* Smooth animation */
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
-        .logo {
-            width: 50px; /* Logo size */
-            height: 50px; /* Logo size */
-            border-radius: 50%; /* Round edges for logos */
-            transition: transform 0.3s; /* Smooth scaling on hover */
+        .link-item {
+            margin: 10px 0;
+            font-size: 18px;
         }
-        .logo-box:hover {
-            transform: scale(1.05); /* Scale logo box on hover */
+        .link-item a {
+            color: #2575fc;
+            text-decoration: none;
         }
-        .logo:hover {
-            transform: scale(1.1); /* Scale logo on hover */
+        .link-item a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1 class="text-center text-white">Your Links</h1>
-    <div class="container-box">
-        <div class="link-list" id="linkList"></div>
+    <h1 class="header text-center my-4">Your Multi-Link QR Code</h1>
+
+    <div class="container">
+
+        <!-- QR Code Box -->
+        <div class="qr-container">
+            <div class="qr-box">
+                <div id="qrcode" class="qr-code"></div>
+            </div>
+        </div>
+
+        <!-- Link List -->
+        <div class="link-list">
+            <h4 class="text-center">Links:</h4>
+            <div id="linkListContainer"></div>
+        </div>
+
     </div>
-</div>
 
-<script>
-    // Function to retrieve query parameters and parse links
-    function getQueryParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-            youtube: params.get('youtube'),
-            facebook: params.get('facebook'),
-            twitter: params.get('twitter'),
-            instagram: params.get('instagram'),
-            linkedin: params.get('linkedin'),
-            snapchat: params.get('snapchat'),
-            tinder: params.get('tinder')
-        };
-    }
-
-    // Function to display the links with their logos
-    function displayLinks() {
-        const links = getQueryParams();
-        const linkList = document.getElementById('linkList');
+    <script>
+        // Extract query parameters from the URL
+        const urlParams = new URLSearchParams(window.location.search);
         
-        const logos = {
-            youtube: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Youtube%20logo%20png%2C%20youtube%20icon%20transparent.jpg",
-            facebook: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook%20logos%20vector%20%28AI%2C%20EPS%2C%20SVG%2C%20PDF%2C%20CDR%29%20free%20download.jpg",
-            twitter: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/X%20Daily%20News%20%28@xDaily%29%20on%20X.jpg",
-            instagram: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download%20%2811%29.jpg",
-            linkedin: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Linkedin%20logo%20png%2C%20Linkedin%20logo%20transparent%20png%2C%20Linkedin%20icon%20transparent%20free%20png.jpg",
-            snapchat: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile%20app%20snapchat%20snapchat%20logo%20colored%20icon%20-%20Download%20in%20SVG%2C%20PNG.jpg",
-            tinder: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium%20Vector%20_%20Tinder%20icon%20in%20paper%20cut%20style%20Social%20media%20icons.jpg"
-        };
+        // Assuming the user entered up to 7 links in multipleqr.html
+        const links = [
+            urlParams.get('link1'),
+            urlParams.get('link2'),
+            urlParams.get('link3'),
+            urlParams.get('link4'),
+            urlParams.get('link5'),
+            urlParams.get('link6'),
+            urlParams.get('link7')
+        ];
 
-        let html = '';
-
-        // Loop through each platform and display the link if provided
-        for (const platform in links) {
-            if (links[platform]) {
-                html += `
-                    <div class="logo-box">
-                        <a href="${links[platform]}" target="_blank">
-                            <img src="${logos[platform]}" alt="${platform}" class="logo">
-                        </a>
-                    </div>
-                `;
+        // Display the links
+        const linkListContainer = document.getElementById('linkListContainer');
+        links.forEach((link, index) => {
+            if (link) {
+                const linkItem = document.createElement('div');
+                linkItem.classList.add('link-item');
+                linkItem.innerHTML = `<a href="${link}" target="_blank">Link ${index + 1}: ${link}</a>`;
+                linkListContainer.appendChild(linkItem);
             }
-        }
+        });
 
-        // If no links are found, display a message
-        if (!html) {
-            html = '<p class="text-white">No links found. Please make sure to generate a valid QR code.</p>';
-        }
-
-        linkList.innerHTML = html;
-    }
-
-    // Call the function to display the links when the page loads
-    displayLinks();
-</script>
+        // Generate the QR code for the current page
+        const qrCodeContainer = document.getElementById('qrcode');
+        const qrUrl = window.location.href;
+        new QRCode(qrCodeContainer, {
+            text: qrUrl,
+            width: 256,
+            height: 256
+        });
+    </script>
 
 </body>
 </html>
