@@ -92,14 +92,15 @@
         <img id="originalQRCode" src="" alt="Original QR Code" width="150" height="150">
       </div>
       <div class="qr-code">
-        <h3>Second QR Code</h3>
-        <div id="secondQRCode"></div>
+        <h3>Modified QR Code</h3>
+        <div id="modifiedQRCode"></div>
       </div>
     </div>
 
     <div class="color-picker">
-      <label for="colorPicker">Choose QR Code Color:</label>
-      <input type="color" id="colorPicker" value="#333333">
+      <label for="colorInput">Choose QR Code Color:</label>
+      <input type="color" id="colorInput" value="#333333">
+      <button onclick="generateModifiedQRCode()">Apply Color</button>
     </div>
   </div>
 
@@ -114,28 +115,26 @@
     // Set the source of the original QR code
     document.getElementById("originalQRCode").src = qrCodeURL;
 
-    // Generate the second QR code with the initial color
-    let secondQRCodeContainer = document.getElementById("secondQRCode");
+    // Store the original QR code data for later use
+    const originalQrData = qrCodeURL;
 
-    const generateQRCodeWithColor = (color) => {
-      secondQRCodeContainer.innerHTML = ""; // Clear existing QR code
-      new QRCode(secondQRCodeContainer, {
-        text: qrCodeURL,
+    // Generate the modified QR code based on selected color
+    function generateModifiedQRCode() {
+      const color = document.getElementById("colorInput").value;
+      const modifiedQrContainer = document.getElementById("modifiedQRCode");
+      modifiedQrContainer.innerHTML = ""; // Clear previous QR code
+
+      new QRCode(modifiedQrContainer, {
+        text: originalQrData,
         width: 150,
         height: 150,
-        colorDark: color, // Apply selected color
-        colorLight: "#ffffff", // White background
+        colorDark: color,
+        colorLight: "#ffffff",
       });
-    };
+    }
 
-    // Generate the second QR code with the initial color
-    generateQRCodeWithColor("#333333");
-
-    // Add event listener for the color picker (only affects the second QR code)
-    document.getElementById("colorPicker").addEventListener("input", function(event) {
-      const selectedColor = event.target.value;
-      generateQRCodeWithColor(selectedColor); // Regenerate QR code with new color
-    });
+    // Initial call to generate the modified QR code with default color
+    generateModifiedQRCode();
   </script>
 
 </body>
