@@ -5,7 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Code Display with Templates</title>
   <style>
-    /* Your CSS code here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .qr-section {
+      margin: 20px;
+      text-align: center;
+    }
+    .qr-box {
+      margin: 10px;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      display: inline-block;
+      text-align: center;
+    }
+    .color-picker {
+      margin: 20px;
+      text-align: center;
+    }
+    .image-picker {
+      text-align: center;
+      margin: 20px;
+    }
+    .template-image {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -33,7 +84,7 @@
     <label for="imageSelect">Select Image for QR Code:</label>
     <div>
       <!-- Replace with links to your images in the GitHub repository -->
-      <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/Download Scan Me Png for free.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image 1">
+      <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/Download%20Scan%20Me%20Png%20for%20free.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image 1">
       <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/image2.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template 2">
       <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/image3.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template 3">
     </div>
@@ -52,8 +103,10 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  
+
   <script>
+    let originalQrData = '';  // This will store the original QR code data URL
+
     // Function to get the QR code from the URL query parameters
     function getQRCodeFromURL() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -70,6 +123,9 @@
         // Append the QR code image to the desired element in templates.html
         const originalQRCodeContainer = document.getElementById('originalQRCode');
         originalQRCodeContainer.appendChild(qrImageElement);
+
+        // Save the URL to generate the modified QR code later
+        originalQrData = qrCodeURL;
       } else {
         console.error('QR code URL is missing in the query parameters.');
       }
@@ -94,6 +150,23 @@
         });
       } else {
         alert("No QR code data received from multipleqr.html!");
+      }
+    }
+
+    // Function to set the selected template image for the QR code
+    function setTemplate(templateImageUrl) {
+      const modifiedQrContainer = document.getElementById("modifiedQRCode");
+      modifiedQrContainer.innerHTML = ''; // Clear previous QR code
+
+      if (originalQrData) {
+        const qrCodeWithTemplate = new QRCode(modifiedQrContainer, {
+          text: originalQrData,
+          width: 150,
+          height: 150,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          logo: templateImageUrl,  // Add template image as logo (only applicable for some QR code libraries)
+        });
       }
     }
 
