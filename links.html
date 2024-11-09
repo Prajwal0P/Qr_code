@@ -3,91 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-        }
-        .link-container {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 500px;
-        }
-        .link-item {
-            background-color: #fff;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-        }
-        .link-logo {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-        }
-        .link-url {
-            color: #0073e6;
-            text-decoration: none;
-            font-weight: bold;
-        }
-    </style>
+    <title>Links</title>
+    <link rel="stylesheet" href="style.css"> <!-- Add your CSS file if you have one -->
 </head>
 <body>
-    <h1>Your Links</h1>
-    <div class="link-container" id="linkContainer">
-        <!-- Links will be displayed here -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="templates.html">Templates</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Links</h1>
+        <div id="links-container">
+            <!-- Links will be displayed here -->
+        </div>
     </div>
 
     <script>
-        // Function to get URL parameters
-        function getUrlParameter(name) {
+        // Function to retrieve links from query parameters
+        function getLinksFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
+            const links = [];
 
-        // Function to display each link
-        function displayLink(platform, url) {
-            if (url) {
-                const linkContainer = document.getElementById('linkContainer');
-                const linkItem = document.createElement('div');
-                linkItem.className = 'link-item';
-
-                const logo = document.createElement('img');
-                logo.className = 'link-logo';
-                logo.src = `logos/${platform}.png`; // Assumes logos are stored in a 'logos' folder
-                logo.alt = `${platform} logo`;
-
-                const link = document.createElement('a');
-                link.className = 'link-url';
-                link.href = url;
-                link.target = '_blank';
-                link.textContent = `${platform.charAt(0).toUpperCase() + platform.slice(1)}: ${url}`;
-
-                linkItem.appendChild(logo);
-                linkItem.appendChild(link);
-                linkContainer.appendChild(linkItem);
+            // Loop through all possible link parameters and store them in the links array
+            for (let i = 1; i <= 7; i++) {
+                const link = urlParams.get('link' + i);
+                if (link) {
+                    links.push(decodeURIComponent(link));
+                }
             }
+
+            return links;
         }
 
-        // List of platforms to retrieve and display
-        const platforms = ['youtube', 'facebook', 'twitter']; // Add other platforms if needed
+        // Function to display links on the page
+        function displayLinks() {
+            const links = getLinksFromURL();
+            const linksContainer = document.getElementById("links-container");
 
-        // Loop through each platform and display the link if available
-        platforms.forEach(platform => {
-            const url = getUrlParameter(platform);
-            displayLink(platform, url);
-        });
+            if (links.length === 0) {
+                linksContainer.innerHTML = "<p>No links provided.</p>";
+                return;
+            }
+
+            links.forEach((link, index) => {
+                const linkElement = document.createElement("p");
+                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
+                linksContainer.appendChild(linkElement);
+            });
+        }
+
+        // Call the displayLinks function when the page loads
+        window.onload = displayLinks;
     </script>
 </body>
 </html>
