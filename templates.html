@@ -163,13 +163,15 @@
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
+        // Draw the selected image as the template
         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
+        // Generate and draw the QR code on top of the image
         const qrCodeContainer = document.createElement("div");
         const qrCode = new QRCode(qrCodeContainer, {
           text: originalQrData,
-          width: 120,
-          height: 120,
+          width: 120, // Adjusted QR code width for larger size
+          height: 120, // Adjusted QR code height for larger size
           colorDark: document.getElementById("colorInput").value,
           colorLight: "#ffffff",
         });
@@ -178,12 +180,15 @@
           const qrCodeImage = qrCodeContainer.querySelector("img");
           const qrWidth = 120;
           const qrHeight = 120;
-          const qrX = (canvas.width - qrWidth) / 2;
-          const qrY = (canvas.height - qrHeight) / 2;
+          const qrX = (canvas.width - qrWidth) / 2; // Center QR code horizontally
+          const qrY = (canvas.height - qrHeight) / 2; // Center QR code vertically
 
+          // Draw QR code on canvas
           ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight);
+
+          // Append the canvas with both the template and QR code
           modifiedQrContainer.appendChild(canvas);
-        }, 100);
+        }, 100); // Delay for QR code to load
       };
     }
   </script>
