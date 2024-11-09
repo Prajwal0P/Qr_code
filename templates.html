@@ -59,6 +59,21 @@
     .template-image:hover {
       border: 2px solid #ffcc00;
     }
+
+    .download-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .download-button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +113,9 @@
       <div id="modifiedQRCode"></div>
     </div>
   </div>
+
+  <!-- Download Button -->
+  <button class="download-button" id="downloadButton" onclick="downloadQRCode()">Download Modified QR Code</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
@@ -172,6 +190,17 @@
       };
     }
 
+    // Function to download the modified QR code as an image
+    function downloadQRCode() {
+      const canvas = document.querySelector("canvas"); // Get the canvas element
+      if (!canvas) return alert("No QR code available to download.");
+
+      const dataURL = canvas.toDataURL("image/png"); // Convert canvas to image data URL
+      const link = document.createElement("a"); // Create a temporary link element
+      link.href = dataURL; // Set the href to the data URL
+      link.download = "modified_qr_code.png"; // Set the download file name
+      link.click(); // Trigger the download
+    }
   </script>
 
 </body>
