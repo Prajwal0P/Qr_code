@@ -190,15 +190,18 @@
       };
     }
 
-    // Function to download the modified QR code as an image
+    // Function to download the modified QR code with template
     function downloadQRCode() {
       const canvas = document.querySelector("canvas"); // Get the canvas element
       if (!canvas) return alert("No QR code available to download.");
 
-      const dataURL = canvas.toDataURL("image/png"); // Convert canvas to image data URL
-      const link = document.createElement("a"); // Create a temporary link element
-      link.href = dataURL; // Set the href to the data URL
-      link.download = "modified_qr_code_with_template.png"; // Set the download file name
+      // Convert canvas to image data URL
+      const dataURL = canvas.toDataURL("image/png");
+
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = dataURL; // Set the link href to the canvas image
+      link.download = "modified_qr_code_with_template.png"; // Set the file name for the download
       link.click(); // Trigger the download
     }
   </script>
