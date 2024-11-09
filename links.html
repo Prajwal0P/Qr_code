@@ -70,19 +70,39 @@
             gap: 15px;
         }
 
-        #links-container p {
-            font-size: 1.2em;
-            color: #0077b6;
-            margin: 0;
+        /* Box to contain link and logo */
+        .link-box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 80%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
         }
 
-        #links-container a {
+        .link-box:hover {
+            transform: scale(1.05);
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 50%;
+        }
+
+        .link-box a {
             text-decoration: none;
             color: #0077b6;
-            transition: color 0.3s;
+            font-size: 1.1em;
+            font-weight: bold;
         }
 
-        #links-container a:hover {
+        .link-box a:hover {
             color: #ff6600;
             text-decoration: underline;
         }
@@ -104,6 +124,15 @@
             }
 
             nav ul li {
+                margin-bottom: 10px;
+            }
+
+            .link-box {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .logo {
                 margin-bottom: 10px;
             }
         }
@@ -142,7 +171,7 @@
             return links;
         }
 
-        // Function to display links on the page
+        // Function to display links on the page with their logos
         function displayLinks() {
             const links = getLinksFromURL();
             const linksContainer = document.getElementById("links-container");
@@ -152,10 +181,27 @@
                 return;
             }
 
+            const logos = {
+                link1: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Youtube%20logo%20png%2C%20youtube%20icon%20transparent.jpg",
+                link2: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook%20logos%20vector%20%28AI%2C%20EPS%2C%20SVG%2C%20PDF%2C%20CDR%29%20free%20download.jpg",
+                link3: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/X%20Daily%20News%20%28%40xDaily%29%20on%20X.jpg",
+                link4: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download%20%2811%29.jpg",
+                link5: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Linkedin%20logo%20png%2C%20Linkedin%20logo%20transparent%20png%2C%20Linkedin%20icon%20transparent%20free%20png.jpg",
+                link6: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile%20app%20snapchat%20snapchat%20logo%20colored%20icon%20-%20Download%20in%20SVG%2C%20PNG.jpg",
+                link7: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium%20Vector%20%20Tinder%20icon%20in%20paper%20cut%20style%20Social%20media%20icons.jpg"
+            };
+
             links.forEach((link, index) => {
-                const linkElement = document.createElement("p");
-                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
-                linksContainer.appendChild(linkElement);
+                const logoUrl = logos['link' + (index + 1)];
+                const linkBox = document.createElement("div");
+                linkBox.classList.add("link-box");
+
+                linkBox.innerHTML = `
+                    <img src="${logoUrl}" alt="Logo" class="logo">
+                    <a href="${link}" target="_blank">${link}</a>
+                `;
+
+                linksContainer.appendChild(linkBox);
             });
         }
 
