@@ -41,7 +41,7 @@
 
         /* Style for the logo */
         .logo {
-            width: 50px;  /* Adjust the width of the logo */
+            width: 30px;  /* Adjust the width of the logo */
             height: auto; /* Maintain the aspect ratio */
             margin-right: 10px;
         }
@@ -54,6 +54,15 @@
 
         #links-container {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #links-container .link-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
         }
 
         #links-container a {
@@ -85,23 +94,25 @@
     </div>
 
     <script>
-        // Function to retrieve links from query parameters
+        // Function to retrieve links and logos from query parameters
         function getLinksFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
             const links = [];
+            const logos = [];
 
             // Loop through all possible link parameters and store them in the links array
             for (let i = 1; i <= 7; i++) {
                 const link = urlParams.get('link' + i);
-                if (link) {
-                    links.push(decodeURIComponent(link));
+                const logo = urlParams.get('logo' + i); // Retrieve logo parameter
+                if (link && logo) {
+                    links.push({ link: decodeURIComponent(link), logo: decodeURIComponent(logo) });
                 }
             }
 
             return links;
         }
 
-        // Function to display links on the page
+        // Function to display links with their respective logos
         function displayLinks() {
             const links = getLinksFromURL();
             const linksContainer = document.getElementById("links-container");
@@ -111,9 +122,27 @@
                 return;
             }
 
-            links.forEach((link, index) => {
-                const linkElement = document.createElement("p");
-                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
+            links.forEach((item) => {
+                const linkElement = document.createElement("div");
+                linkElement.classList.add("link-item");
+
+                // Create an img element for the logo
+                const logoElement = document.createElement("img");
+                logoElement.src = "logos/" + item.logo; // Set the path to the logo
+                logoElement.alt = item.logo;
+                logoElement.classList.add("logo");
+
+                // Create an a element for the link
+                const linkText = document.createElement("a");
+                linkText.href = item.link;
+                linkText.target = "_blank";
+                linkText.innerText = item.link;
+
+                // Append the logo and link to the link element
+                linkElement.appendChild(logoElement);
+                linkElement.appendChild(linkText);
+
+                // Append the link element to the container
                 linksContainer.appendChild(linkElement);
             });
         }
