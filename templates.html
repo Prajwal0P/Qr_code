@@ -14,23 +14,20 @@
       margin: 0;
       background: linear-gradient(135deg, #4a90e2, #52a5f2);
       color: white;
-      padding: 10px;
-      box-sizing: border-box;
     }
 
     h1 {
       margin: 20px 0;
-      text-align: center;
     }
 
     .qr-section {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
       margin-top: 20px;
       width: 100%;
       max-width: 700px;
+      flex-wrap: wrap; /* Ensures the items stack on small screens */
     }
 
     .qr-box {
@@ -44,16 +41,11 @@
       min-width: 180px;
       min-height: 220px;
       color: #000;
-      margin: 10px;
-      box-sizing: border-box;
-      width: 100%;
-      max-width: 300px;
+      margin: 10px; /* Ensure some spacing between boxes */
     }
 
     .color-picker, .image-picker {
       margin-top: 15px;
-      text-align: center;
-      width: 100%;
     }
 
     .template-image {
@@ -62,23 +54,10 @@
       cursor: pointer;
       border: 2px solid transparent;
       margin: 5px;
-      box-sizing: border-box;
     }
 
     .template-image:hover {
       border: 2px solid #ffcc00;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      .qr-section {
-        flex-direction: column;
-      }
-
-      .template-image {
-        width: 50px;
-        height: 50px;
-      }
     }
   </style>
 </head>
@@ -122,6 +101,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
+    // Original QR code data from multipleqr.html
     const originalQrData = "https://Prajwal0P.github.io/Qr_code/links.html"; // Set to your actual data URL
 
     // Display the original QR code
@@ -133,6 +113,7 @@
       colorLight: "#ffffff",
     });
 
+    // Function to generate a modified QR code with chosen color
     function generateModifiedQRCode() {
       const color = document.getElementById("colorInput").value;
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
@@ -147,26 +128,28 @@
       });
     }
 
+    // Function to set a template for the QR code
     function setTemplate(imageSrc) {
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
       modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-
+  
       const img = new Image();
       img.src = imageSrc;
 
       img.onload = () => {
-        const canvasWidth = 300;
-        const canvasHeight = 300;
+        // Set canvas size (adjust these values for desired image size)
+        const canvasWidth = 300; // New width for the canvas
+        const canvasHeight = 300; // New height for the canvas
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        // Draw the selected image as the template
+        // Draw the selected image, scaling it to fit the canvas
         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 
-        // Generate and draw the QR code on top of the image
+        // Draw the modified QR code on top of the image
         const qrCodeContainer = document.createElement("div");
         const qrCode = new QRCode(qrCodeContainer, {
           text: originalQrData,
@@ -178,19 +161,17 @@
 
         setTimeout(() => {
           const qrCodeImage = qrCodeContainer.querySelector("img");
-          const qrWidth = 120;
-          const qrHeight = 120;
+          const qrWidth = 120; // Increased QR code width
+          const qrHeight = 120; // Increased QR code height
           const qrX = (canvas.width - qrWidth) / 2; // Center QR code horizontally
           const qrY = (canvas.height - qrHeight) / 2; // Center QR code vertically
 
-          // Draw QR code on canvas
-          ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight);
-
-          // Append the canvas with both the template and QR code
-          modifiedQrContainer.appendChild(canvas);
+          ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight); // Draw QR code on canvas
+          modifiedQrContainer.appendChild(canvas); // Add canvas to the container
         }, 100); // Delay for QR code to load
       };
     }
+
   </script>
 
 </body>
