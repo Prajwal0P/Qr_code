@@ -223,7 +223,7 @@
             <div id="qrcode" class="qr-code"></div>
             <div class="button-container">
                 <button class="btn btn-download hidden" id="downloadButton" onclick="downloadQRCode()">Download QR Code</button>
-                <button class="btn btn-templates hidden" id="templatesButton" onclick="redirectToTemplates()">Templates</button>
+                <button class="btn btn-templates hidden" id="templatesButton" onclick="redirectToTemplatePage()">Templates</button>
             </div>
         </div>
     </div>
@@ -406,11 +406,15 @@ linkInput.addEventListener('blur', function() {
             link.click();
         }
 
-       // Assuming qrImageURL contains the URL or base64 data of the QR code
+// Function to redirect to templates.html with the QR code data in the query string
 function redirectToTemplatePage() {
-  const qrImageURL = generateQRCode();  // Assuming this generates or stores the QR code URL
-  const templatePageURL = `templates.html?qr=${encodeURIComponent(qrImageURL)}`;
-  window.location.href = templatePageURL;  // Redirect to the templates.html page
+  const qrImageURL = generateQRCode(); // Generate QR code and get its URL or data
+  if (qrImageURL) {
+    const templatePageURL = `templates.html?qr=${encodeURIComponent(qrImageURL)}`;
+    window.location.href = templatePageURL; // Redirect to templates.html with the QR code data in the URL
+  } else {
+    alert("Failed to generate QR code.");
+  }
 }
 
     </script>
