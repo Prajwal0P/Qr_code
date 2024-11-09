@@ -406,9 +406,13 @@ linkInput.addEventListener('blur', function() {
             link.click();
         }
 
-        function redirectToTemplates() {
-            window.location.href = 'templates.html';
-        }
+       // Assuming qrImageURL contains the URL or base64 data of the QR code
+function redirectToTemplatePage() {
+  const qrImageURL = generateQRCode();  // Assuming this generates or stores the QR code URL
+  const templatePageURL = `templates.html?qr=${encodeURIComponent(qrImageURL)}`;
+  window.location.href = templatePageURL;  // Redirect to the templates.html page
+}
+
     </script>
 
 </body>
