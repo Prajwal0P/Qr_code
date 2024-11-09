@@ -3,108 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Links</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Links Page</title>
     <style>
         body {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #ffffff;
-            font-family: 'Roboto', sans-serif;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding-top: 20px;
+        h1 {
+            color: #333;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        .link-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
         }
         .link-item {
+            background-color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 15px;
-            transition: background-color 0.3s ease;
         }
-        .link-item:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .link-logo {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
         }
-        .logo {
-            width: 40px;
-            height: 40px;
-            margin-right: 15px;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-        .link-text {
-            color: #ffffff;
-            font-size: 1rem;
+        .link-url {
+            color: #0073e6;
             text-decoration: none;
-            transition: color 0.3s;
-        }
-        .link-text:hover {
-            color: #ff9966;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="header">Your Links</h1>
-        <div id="linksContainer"></div>
+    <h1>Your Links</h1>
+    <div class="link-container" id="linkContainer">
+        <!-- Links will be displayed here -->
     </div>
 
     <script>
-        // Retrieve links from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-
-        // List of platforms and their icons
-        const platforms = {
-            youtube: { name: "YouTube", logo: "logos/yt.jpg" },
-            facebook: { name: "Facebook", logo: "logos/fb.jpg" },
-            twitter: { name: "Twitter", logo: "logos/x.jpg" },
-            instagram: { name: "Instagram", logo: "logos/insta.jpg" },
-            linkedin: { name: "LinkedIn", logo: "logos/linkedin.jpg" },
-            snapchat: { name: "Snapchat", logo: "logos/snap.jpg" },
-            tinder: { name: "Tinder", logo: "logos/tinder.jpg" }
-        };
-
-        // Function to create link elements
-        function createLinkElement(platform, url) {
-            const linkItem = document.createElement("div");
-            linkItem.className = "link-item";
-
-            const logo = document.createElement("img");
-            logo.src = platform.logo;
-            logo.alt = platform.name;
-            logo.className = "logo";
-
-            const linkText = document.createElement("a");
-            linkText.href = url;
-            linkText.target = "_blank";
-            linkText.className = "link-text";
-            linkText.textContent = `${platform.name} Link`;
-
-            linkItem.appendChild(logo);
-            linkItem.appendChild(linkText);
-
-            return linkItem;
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
         }
 
-        // Populate links based on URL parameters
-        const linksContainer = document.getElementById("linksContainer");
-
-        for (const [key, platform] of Object.entries(platforms)) {
-            const url = urlParams.get(key);
+        // Function to display each link
+        function displayLink(platform, url) {
             if (url) {
-                const linkElement = createLinkElement(platform, decodeURIComponent(url));
-                linksContainer.appendChild(linkElement);
+                const linkContainer = document.getElementById('linkContainer');
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item';
+
+                const logo = document.createElement('img');
+                logo.className = 'link-logo';
+                logo.src = `logos/${platform}.png`; // Assumes logos are stored in a 'logos' folder
+                logo.alt = `${platform} logo`;
+
+                const link = document.createElement('a');
+                link.className = 'link-url';
+                link.href = url;
+                link.target = '_blank';
+                link.textContent = `${platform.charAt(0).toUpperCase() + platform.slice(1)}: ${url}`;
+
+                linkItem.appendChild(logo);
+                linkItem.appendChild(link);
+                linkContainer.appendChild(linkItem);
             }
         }
+
+        // List of platforms to retrieve and display
+        const platforms = ['youtube', 'facebook', 'twitter']; // Add other platforms if needed
+
+        // Loop through each platform and display the link if available
+        platforms.forEach(platform => {
+            const url = getUrlParameter(platform);
+            displayLink(platform, url);
+        });
     </script>
 </body>
 </html>
