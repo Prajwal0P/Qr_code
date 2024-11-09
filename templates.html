@@ -100,7 +100,7 @@
   </div>
 
   <!-- Button to Download Modified QR Code -->
-  <button onclick="downloadModifiedQRCode()">Download Modified QR Code</button>
+  <button onclick="downloadModifiedQRCode(event)">Download Modified QR Code</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
@@ -177,7 +177,9 @@
     }
 
     // Function to download the modified QR code with template and color
-    function downloadModifiedQRCode() {
+    function downloadModifiedQRCode(event) {
+      event.preventDefault(); // Prevent page scroll/jump
+
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
 
       // Ensure that the container has a canvas with QR code before attempting download
