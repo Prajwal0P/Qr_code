@@ -118,24 +118,30 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Function to get the QR code URL from the query string (from multipleqr.html)
+   // Function to get the QR code from the URL query parameters
+function getQRCodeFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    const originalQrData = urlParams.get("qr"); // Get the QR URL passed from multipleqr.html
+    const qrCodeURL = urlParams.get('qr'); // Get the QR code URL from the query string
 
-    if (originalQrData) {
-      // Display the original QR code if the URL parameter exists
-      new QRCode(document.getElementById("originalQRCode"), {
-        text: originalQrData,
-        width: 150,
-        height: 150,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-      });
+    if (qrCodeURL) {
+        // Create an image element to display the QR code
+        const qrImageElement = document.createElement('img');
+        qrImageElement.src = qrCodeURL; // Set the QR code URL as the source
+        qrImageElement.alt = 'Generated QR Code';
+        qrImageElement.style.width = '200px'; // Optional: Adjust size of the image
+        qrImageElement.style.height = '200px'; // Optional: Adjust size of the image
+
+        // Append the QR code image to the desired element in templates.html
+        const qrContainer = document.getElementById('qrContainer'); // Make sure this element exists in your HTML
+        qrContainer.appendChild(qrImageElement);
     } else {
-      document.getElementById("originalQRCode").innerText = "No QR code data received!";
+        console.error('QR code URL is missing in the query parameters.');
     }
+}
 
-    let selectedTemplate = null;
+// Call the function to load the QR code when the page is loaded
+window.onload = getQRCodeFromURL;
+
 
     // Function to generate the modified QR code with color
     function generateModifiedQRCode() {
