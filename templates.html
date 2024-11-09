@@ -59,6 +59,16 @@
     .template-image:hover {
       border: 2px solid #ffcc00;
     }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -85,7 +95,7 @@
   <div class="image-picker">
     <label for="imageSelect">Select Image for QR Code:</label>
     <div>
-      <img src="https://as2.ftcdn.net/v2/jpg/05/33/87/23/1000_F_533872377_IvXJBlXRGwFW9LP34UOLBu3u4ip3FrEx.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image">
+      <img src="https://path/to/your/template.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image 1">
       <img src="https://via.placeholder.com/60" class="template-image" onclick="setTemplate(this.src)" alt="Template 2">
       <img src="https://via.placeholder.com/60/00FF00/FFFFFF?text=3" class="template-image" onclick="setTemplate(this.src)" alt="Template 3">
     </div>
@@ -99,13 +109,15 @@
     </div>
   </div>
 
-  <!-- Button to Download Modified QR Code -->
-  <button onclick="downloadModifiedQRCode()">Download Modified QR Code</button>
+  <!-- Download Button -->
+  <button onclick="downloadQRCode()">Download Modified QR Code</button>
 
+  <!-- Include FileSaver.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Original QR code data from multipleqr.html
-    const originalQrData = "https://Prajwal0P.github.io/Qr_code/links.html"; // Set to your actual data URL
+    const originalQrData = "https://Prajwal0P.github.io/Qr_code/links.html"; // Replace with your actual URL
 
     // Display the original QR code
     new QRCode(document.getElementById("originalQRCode"), {
@@ -116,7 +128,9 @@
       colorLight: "#ffffff",
     });
 
-    // Function to generate a modified QR code with chosen color
+    let selectedTemplate = null;
+
+    // Function to generate the modified QR code with color
     function generateModifiedQRCode() {
       const color = document.getElementById("colorInput").value;
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
@@ -131,72 +145,59 @@
       });
     }
 
-    // Function to set a template for the QR code
+    // Function to set the template image and overlay QR code
     function setTemplate(imageSrc) {
+      selectedTemplate = imageSrc;
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
       modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
-      // Create an img element to load the template image
       const img = new Image();
-      img.src = imageSrc;
+      img.crossOrigin = "Anonymous"; // Ensure CORS compliance
+      img.src = selectedTemplate;
 
-      img.onload = () => {
-        // Generate the QR code with template
-        const qrCodeContainer = document.createElement("div");
-        const qrCode = new QRCode(qrCodeContainer, {
+      img.onload = function() {
+        // Create canvas for combining the QR code and template
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const canvasWidth = 300;
+        const canvasHeight = 300;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        // Draw template image on canvas
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+
+        // Generate QR code over template
+        const qrContainer = document.createElement("div");
+        new QRCode(qrContainer, {
           text: originalQrData,
-          width: 120, // Adjusted QR code width
-          height: 120, // Adjusted QR code height
+          width: 120,
+          height: 120,
           colorDark: document.getElementById("colorInput").value,
           colorLight: "#ffffff",
         });
 
-        setTimeout(() => {
-          const qrCodeImage = qrCodeContainer.querySelector("img");
-
-          // Create a canvas element to draw both the QR code and the selected template
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-
-          // Set canvas size (adjust this for larger images)
-          const canvasWidth = 300;
-          const canvasHeight = 300;
-          canvas.width = canvasWidth;
-          canvas.height = canvasHeight;
-
-          // Draw the template image
-          ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-
-          // Draw the QR code on top of the template
-          const qrWidth = 120;
-          const qrHeight = 120;
-          const qrX = (canvas.width - qrWidth) / 2; // Center QR code horizontally
-          const qrY = (canvas.height - qrHeight) / 2; // Center QR code vertically
-          ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight);
-
-          modifiedQrContainer.appendChild(canvas); // Add the canvas with both template and QR code
-        }, 100); // Delay to allow QR code to load
+        // Wait for QR code image to load before drawing on canvas
+        qrContainer.querySelector("img").onload = function() {
+          const qrCodeImage = qrContainer.querySelector("img");
+          if (qrCodeImage) {
+            ctx.drawImage(qrCodeImage, 90, 90, 120, 120); // Center QR on canvas
+            modifiedQrContainer.appendChild(canvas); // Add to DOM
+          }
+        };
       };
     }
 
-    // Function to download the modified QR code with template and color
-    function downloadModifiedQRCode() {
-      const modifiedQrContainer = document.getElementById("modifiedQRCode");
-
-      // Ensure the container has a canvas (with the QR code and template) before download
-      if (modifiedQrContainer && modifiedQrContainer.firstChild) {
-        const canvas = modifiedQrContainer.firstChild; // Get the canvas element
-
-        // Convert the canvas to an image URL
-        const dataUrl = canvas.toDataURL("image/png");
-
-        // Create an anchor element to trigger the download
-        const link = document.createElement("a");
-        link.download = "modified_qr_code.png"; // Set the filename for the download
-        link.href = dataUrl; // Set the image URL for the download
-        link.click(); // Trigger the download
+    // Function to download the modified QR code as an image using FileSaver.js
+    function downloadQRCode() {
+      const canvas = document.querySelector("#modifiedQRCode canvas");
+      if (canvas) {
+        canvas.toBlob(function(blob) {
+          saveAs(blob, "modified_qr_code.png"); // This will download the image as a PNG file using FileSaver.js
+        });
       } else {
-        alert("Please generate a modified QR code first!");
+        alert("Please generate the QR code first!");
       }
     }
   </script>
