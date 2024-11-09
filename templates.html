@@ -27,7 +27,7 @@
       margin-top: 20px;
       width: 100%;
       max-width: 700px;
-      flex-wrap: wrap; /* Ensures the items stack on small screens */
+      flex-wrap: wrap;
     }
 
     .qr-box {
@@ -41,7 +41,7 @@
       min-width: 180px;
       min-height: 220px;
       color: #000;
-      margin: 10px; /* Ensure some spacing between boxes */
+      margin: 10px;
     }
 
     .color-picker, .image-picker {
@@ -99,7 +99,7 @@
     </div>
   </div>
 
-  <!-- Download Button -->
+  <!-- Button to Download Modified QR Code -->
   <button onclick="downloadModifiedQRCode()">Download Modified QR Code</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -176,14 +176,13 @@
       };
     }
 
-    // Function to download the modified QR code
+    // Function to download the modified QR code with template and color
     function downloadModifiedQRCode() {
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
-
       html2canvas(modifiedQrContainer).then(function(canvas) {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL("image/png");
-        link.download = "modified-qr-code.png";
+        const link = document.createElement("a");
+        link.download = "modified_qr_code.png";
+        link.href = canvas.toDataURL();
         link.click();
       });
     }
