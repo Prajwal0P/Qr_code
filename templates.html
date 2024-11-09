@@ -118,18 +118,22 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Function to get the QR code URL from the query string (from multipleqr.html)
+    // Get the QR code URL from the query string (from multipleqr.html)
     const urlParams = new URLSearchParams(window.location.search);
-    const originalQrData = urlParams.get("qr") || "https://Prajwal0P.github.io/Qr_code/links.html"; // Default URL if no QR URL is passed
+    const originalQrData = urlParams.get("qr");
 
-    // Display the original QR code
-    new QRCode(document.getElementById("originalQRCode"), {
-      text: originalQrData,
-      width: 150,
-      height: 150,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-    });
+    if (originalQrData) {
+      // Display the original QR code
+      new QRCode(document.getElementById("originalQRCode"), {
+        text: originalQrData,
+        width: 150,
+        height: 150,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+      });
+    } else {
+      alert("No QR code URL found in the query parameters.");
+    }
 
     let selectedTemplate = null;
 
