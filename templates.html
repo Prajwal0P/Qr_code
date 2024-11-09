@@ -121,19 +121,18 @@
 // Get the QR code URL from the query string
 const urlParams = new URLSearchParams(window.location.search);
 const qrCodeURL = urlParams.get('qr'); // This will get the QR URL from the query parameter
-
 if (qrCodeURL) {
-  // Display the original QR code based on the URL from the query string
-  new QRCode(document.getElementById("originalQRCode"), {
-    text: qrCodeURL, // Use the dynamically passed URL
-    width: 150,
-    height: 150,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-  });
+   new QRCode(document.getElementById("originalQRCode"), {
+      text: qrCodeURL, // Using the passed URL
+      width: 150,
+      height: 150,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+   });
 } else {
-  console.error('QR code URL is missing in the query parameters.');
+   console.error('QR code URL is missing in the query parameters.');
 }
+
 
 let selectedTemplate = null;
 
