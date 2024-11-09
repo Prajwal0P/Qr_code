@@ -3,116 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Your Links</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
         }
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
+            max-width: 600px;
+            margin: auto;
+            padding-top: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
         }
         .link-item {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fafafa;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
         }
-        .link-item img {
-            width: 30px;
-            height: 30px;
+        .link-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
             margin-right: 15px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
-        .link-item a {
-            color: #333;
+        .link-text {
+            color: #ffffff;
+            font-size: 1rem;
             text-decoration: none;
-            font-size: 16px;
+            transition: color 0.3s;
         }
-        .link-item a:hover {
-            color: #007bff;
+        .link-text:hover {
+            color: #ff9966;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>Links</h1>
-        <div id="links-container"></div>
+        <h1 class="header">Your Links</h1>
+        <div id="linksContainer"></div>
     </div>
 
     <script>
-        // Function to get and parse the URL parameters
-        function getLinksFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const links = urlParams.get('links');
+        // Retrieve links from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
 
-            // Log the raw links parameter to see what's being received
-            console.log('Raw links parameter:', links);
+        // List of platforms and their icons
+        const platforms = {
+            youtube: { name: "YouTube", logo: "logos/yt.jpg" },
+            facebook: { name: "Facebook", logo: "logos/fb.jpg" },
+            twitter: { name: "Twitter", logo: "logos/x.jpg" },
+            instagram: { name: "Instagram", logo: "logos/insta.jpg" },
+            linkedin: { name: "LinkedIn", logo: "logos/linkedin.jpg" },
+            snapchat: { name: "Snapchat", logo: "logos/snap.jpg" },
+            tinder: { name: "Tinder", logo: "logos/tinder.jpg" }
+        };
 
-            // Check if links parameter exists and parse it as JSON
-            if (links) {
-                try {
-                    const parsedLinks = JSON.parse(decodeURIComponent(links));
-                    console.log('Parsed links:', parsedLinks);
-                    return parsedLinks;
-                } catch (error) {
-                    console.error('Error parsing links:', error);
-                    return [];
-                }
-            } else {
-                return [];
-            }
+        // Function to create link elements
+        function createLinkElement(platform, url) {
+            const linkItem = document.createElement("div");
+            linkItem.className = "link-item";
+
+            const logo = document.createElement("img");
+            logo.src = platform.logo;
+            logo.alt = platform.name;
+            logo.className = "logo";
+
+            const linkText = document.createElement("a");
+            linkText.href = url;
+            linkText.target = "_blank";
+            linkText.className = "link-text";
+            linkText.textContent = `${platform.name} Link`;
+
+            linkItem.appendChild(logo);
+            linkItem.appendChild(linkText);
+
+            return linkItem;
         }
 
-        // Function to render the links with corresponding logos
-        function renderLinks(links) {
-            const container = document.getElementById('links-container');
-            
-            // Clear the container before adding new links
-            container.innerHTML = '';
+        // Populate links based on URL parameters
+        const linksContainer = document.getElementById("linksContainer");
 
-            if (links.length === 0) {
-                container.innerHTML = '<p>No links found.</p>';
-                return;
+        for (const [key, platform] of Object.entries(platforms)) {
+            const url = urlParams.get(key);
+            if (url) {
+                const linkElement = createLinkElement(platform, decodeURIComponent(url));
+                linksContainer.appendChild(linkElement);
             }
-
-            links.forEach(link => {
-                const linkItem = document.createElement('div');
-                linkItem.classList.add('link-item');
-
-                // Create the logo image
-                const logo = document.createElement('img');
-                logo.src = `logos/${link.platform}.png`; // Ensure the logo exists in the 'logos' folder
-                logo.alt = `${link.platform} logo`;
-
-                // Create the link element
-                const linkElement = document.createElement('a');
-                linkElement.href = link.url;
-                linkElement.target = "_blank";
-                linkElement.textContent = link.url;
-
-                // Append logo and link to the link item
-                linkItem.appendChild(logo);
-                linkItem.appendChild(linkElement);
-
-                // Append the link item to the container
-                container.appendChild(linkItem);
-            });
         }
-
-        // Get links from the URL and render them
-        const links = getLinksFromUrl();
-        renderLinks(links);
     </script>
-
 </body>
 </html>
