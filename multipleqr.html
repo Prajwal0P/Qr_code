@@ -406,16 +406,10 @@ linkInput.addEventListener('blur', function() {
             link.click();
         }
 
-// Function to redirect to templates.html with the QR code data in the query string
-function redirectToTemplatePage() {
-  const qrImageURL = generateQRCode(); // Generate QR code and get its URL or data
-  if (qrImageURL) {
-    const templatePageURL = `templates.html?qr=${encodeURIComponent(qrImageURL)}`;
-    window.location.href = templatePageURL; // Redirect to templates.html with the QR code data in the URL
-  } else {
-    alert("Failed to generate QR code.");
-  }
-}
+     function redirectToTemplatePage() {
+            const qrUrl = "https://Prajwal0P.github.io/Qr_code/links.html?" + new URLSearchParams(window.location.search).toString();
+            window.location.href = `templates.html?qr=${encodeURIComponent(qrUrl)}`;
+        }
 
     </script>
 
