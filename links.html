@@ -5,82 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Links</title>
     <style>
-        /* Style for the navigation */
+        /* General page styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navigation Bar */
         nav {
             background-color: #333;
-            padding: 10px;
+            padding: 15px 20px;
         }
 
-        ul {
-            display: flex;  /* Use flexbox to align the logo and links horizontally */
-            align-items: center;  /* Vertically align items in the center */
-            list-style: none;
-            padding: 0;
+        nav ul {
+            list-style-type: none;
             margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
         }
 
-        ul li {
-            margin-left: 20px;  /* Add space between the items */
+        nav ul li {
+            margin-right: 20px;
         }
 
-        ul li.logo-item {
-            margin-right: auto;  /* Push the logo to the leftmost side */
-        }
-
-        ul li a {
-            color: white;
+        nav ul li a {
             text-decoration: none;
+            color: white;
             font-size: 18px;
-            padding: 10px;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: color 0.3s;
         }
 
-        ul li a:hover {
-            background-color: #555;
-            border-radius: 5px;
+        nav ul li a:hover {
+            color: #ff6600;
         }
 
-        /* Style for the logo */
-        .logo {
-            width: 30px;  /* Adjust the width of the logo */
-            height: auto; /* Maintain the aspect ratio */
-            margin-right: 10px;
-        }
-
-        /* Container for the links */
+        /* Container for links */
         .container {
-            padding: 20px;
+            width: 80%;
+            margin: 30px auto;
             text-align: center;
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        .container h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the links container */
         #links-container {
-            margin-top: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 15px;
         }
 
-        #links-container .link-item {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
+        #links-container p {
+            font-size: 1.2em;
+            color: #0077b6;
+            margin: 0;
         }
 
         #links-container a {
-            color: #333;
             text-decoration: none;
-            font-size: 16px;
+            color: #0077b6;
+            transition: color 0.3s;
         }
 
         #links-container a:hover {
-            color: #007BFF;
+            color: #ff6600;
             text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .container h1 {
+                font-size: 2em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul li {
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <nav>
         <ul>
-            <li class="logo-item"><a href="index.html"><img src="images/logo.png" alt="Logo" class="logo"></a></li> <!-- Logo added here -->
             <li><a href="index.html">Home</a></li>
             <li><a href="templates.html">Templates</a></li>
         </ul>
@@ -94,25 +125,23 @@
     </div>
 
     <script>
-        // Function to retrieve links and logos from query parameters
+        // Function to retrieve links from query parameters
         function getLinksFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
             const links = [];
-            const logos = [];
 
             // Loop through all possible link parameters and store them in the links array
             for (let i = 1; i <= 7; i++) {
                 const link = urlParams.get('link' + i);
-                const logo = urlParams.get('logo' + i); // Retrieve logo parameter
-                if (link && logo) {
-                    links.push({ link: decodeURIComponent(link), logo: decodeURIComponent(logo) });
+                if (link) {
+                    links.push(decodeURIComponent(link));
                 }
             }
 
             return links;
         }
 
-        // Function to display links with their respective logos
+        // Function to display links on the page
         function displayLinks() {
             const links = getLinksFromURL();
             const linksContainer = document.getElementById("links-container");
@@ -122,27 +151,9 @@
                 return;
             }
 
-            links.forEach((item) => {
-                const linkElement = document.createElement("div");
-                linkElement.classList.add("link-item");
-
-                // Create an img element for the logo
-                const logoElement = document.createElement("img");
-                logoElement.src = "logos/" + item.logo; // Set the path to the logo
-                logoElement.alt = item.logo;
-                logoElement.classList.add("logo");
-
-                // Create an a element for the link
-                const linkText = document.createElement("a");
-                linkText.href = item.link;
-                linkText.target = "_blank";
-                linkText.innerText = item.link;
-
-                // Append the logo and link to the link element
-                linkElement.appendChild(logoElement);
-                linkElement.appendChild(linkText);
-
-                // Append the link element to the container
+            links.forEach((link, index) => {
+                const linkElement = document.createElement("p");
+                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
                 linksContainer.appendChild(linkElement);
             });
         }
