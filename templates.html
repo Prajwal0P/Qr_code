@@ -118,7 +118,9 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    const originalQrData = "https://Prajwal0P.github.io/Qr_code/links.html"; // Replace with your actual URL
+    // Function to get the QR code URL from the query string (from multipleqr.html)
+    const urlParams = new URLSearchParams(window.location.search);
+    const originalQrData = urlParams.get("qr") || "https://Prajwal0P.github.io/Qr_code/links.html"; // Default URL if no QR URL is passed
 
     // Display the original QR code
     new QRCode(document.getElementById("originalQRCode"), {
