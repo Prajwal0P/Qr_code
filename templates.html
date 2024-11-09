@@ -172,6 +172,14 @@
       };
     }
 
+    // To fix rendering issue on mobile: Ensure the QR code canvas resizes correctly
+    window.addEventListener('resize', function () {
+      const canvas = document.querySelector('canvas');
+      if (canvas) {
+        canvas.width = Math.min(window.innerWidth * 0.8, 300); // Resize the canvas width to a reasonable size
+        canvas.height = Math.min(window.innerHeight * 0.4, 300); // Resize the canvas height to a reasonable size
+      }
+    });
   </script>
 
 </body>
