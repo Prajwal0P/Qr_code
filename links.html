@@ -3,154 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Links</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Links</title>
     <style>
+        /* General page styling */
         body {
-            background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
-            color: #212529;
-            font-family: 'Roboto', sans-serif;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
         }
 
-        .link-list {
-            margin-top: 20px;
+        /* Navigation Bar */
+        nav {
+            background-color: #333;
+            padding: 15px 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center; /* Center logos and links horizontally */
+            justify-content: flex-start;
         }
 
-        .container-box {
-            background-color: rgba(255, 255, 255, 0.5); /* Transparent white background */
-            border-radius: 10px; /* Rounded corners */
-            padding: 20px; /* Padding inside the container */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow for the container */
+        nav ul li {
+            margin-right: 20px;
         }
 
-        .logo-box {
-            margin: 10px 0; /* Space between logo boxes */
-            padding: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.7); /* Border color */
-            border-radius: 10px; /* Rounded corners */
-            display: flex;
-            justify-content: flex-start; /* Align content to the left */
-            align-items: center; /* Center the items vertically */
-            width: 100%; /* Ensure box takes full width */
-            transition: transform 0.3s; /* Smooth animation */
-        }
-
-        .logo {
-            width: 40px; /* Logo size */
-            height: 40px; /* Logo size */
-            border-radius: 50%; /* Round edges for logos */
-            margin-right: 15px; /* Space between logo and link */
-            transition: transform 0.3s; /* Smooth scaling on hover */
-        }
-
-        .logo-box:hover {
-            transform: scale(1.05); /* Scale logo box on hover */
-        }
-
-        .logo:hover {
-            transform: scale(1.1); /* Scale logo on hover */
-        }
-
-        .link-text {
-            color: #212529;
+        nav ul li a {
             text-decoration: none;
-            font-size: 1.2em;
+            color: white;
+            font-size: 18px;
             font-weight: bold;
+            padding: 5px 10px;
             transition: color 0.3s;
         }
 
-        .link-text:hover {
-            color: #ff6600; /* Change color on hover */
+        nav ul li a:hover {
+            color: #ff6600;
         }
 
+        /* Container for links */
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            text-align: center;
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the links container */
+        #links-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #links-container p {
+            font-size: 1.2em;
+            color: #0077b6;
+            margin: 0;
+        }
+
+        #links-container a {
+            text-decoration: none;
+            color: #0077b6;
+            transition: color 0.3s;
+        }
+
+        #links-container a:hover {
+            color: #ff6600;
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .container h1 {
+                font-size: 2em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul li {
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="templates.html">Templates</a></li>
+        </ul>
+    </nav>
 
-<div class="container">
-    <h1 class="text-center text-white">Your Links</h1>
-    <div class="container-box">
-        <div class="link-list" id="linkList"></div>
+    <div class="container">
+        <h1>Links</h1>
+        <div id="links-container">
+            <!-- Links will be displayed here -->
+        </div>
     </div>
-</div>
 
-<script>
-    function getQueryParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-            link1: params.get('link1'),
-            link2: params.get('link2'),
-            link3: params.get('link3'),
-            link4: params.get('link4'),
-            link5: params.get('link5'),
-            link6: params.get('link6'),
-            link7: params.get('link7')
-        };
-    }
+    <script>
+        // Function to retrieve links from query parameters
+        function getLinksFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const links = [];
 
-    function displayLinks() {
-        const links = getQueryParams();
-        const linkList = document.getElementById('linkList');
-        const logos = {
-            link1: {
-                url: links.link1 || "https://www.youtube.com", // Default to YouTube
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Youtube%20logo%20png%2C%20youtube%20icon%20transparent.jpg" // YouTube logo
-            },
-            link2: {
-                url: links.link2 || "https://www.facebook.com", // Default to Facebook
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook%20logos%20vector%20%28AI%2C%20EPS%2C%20SVG%2C%20PDF%2C%20CDR%29%20free%20download.jpg" // Facebook logo
-            },
-            link3: {
-                url: links.link3 || "https://www.x.com", // Default to X
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/X%20Daily%20News%20%28%40xDaily%29%20on%20X.jpg" // X logo
-            },
-            link4: {
-                url: links.link4 || "https://www.instagram.com", // Default to Instagram
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download%20%2811%29.jpg" // Instagram logo
-            },
-            link5: {
-                url: links.link5 || "https://www.linkedin.com", // Default to LinkedIn
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Linkedin%20logo%20png%2C%20Linkedin%20logo%20transparent%20png%2C%20Linkedin%20icon%20transparent%20free%20png.jpg" // LinkedIn logo
-            },
-            link6: {
-                url: links.link6 || "https://www.snapchat.com", // Default to Snapchat
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile%20app%20snapchat%20snapchat%20logo%20colored%20icon%20-%20Download%20in%20SVG%2C%20PNG.jpg" // Snapchat logo
-            },
-            link7: {
-                url: links.link7 || "https://www.tinder.com", // Default to Tinder
-                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium%20Vector%20%20_%20Tinder%20icon%20in%20paper%20cut%20style%20Social%20media%20icons.jpg" // Tinder logo
+            // Loop through all possible link parameters and store them in the links array
+            for (let i = 1; i <= 7; i++) {
+                const link = urlParams.get('link' + i);
+                if (link) {
+                    // Decode the URL properly using decodeURIComponent
+                    links.push(decodeURIComponent(link)); // Decode the URL
+                }
             }
-        };
 
-        let html = '';
-
-        for (const key in links) {
-            if (links[key]) {
-                html += `
-                    <div class="logo-box">
-                        <a href="${logos[key].url}" target="_blank">
-                            <img src="${logos[key].img}" alt="${key}" class="logo">
-                        </a>
-                        <a href="${logos[key].url}" target="_blank" class="link-text">${logos[key].url}</a>
-                    </div>
-                `;
-            }
+            return links;
         }
 
-        if (html === '') {
-            html = '<p>No links found.</p>';
+        // Function to display links on the page
+        function displayLinks() {
+            const links = getLinksFromURL();
+            const linksContainer = document.getElementById("links-container");
+
+            if (links.length === 0) {
+                linksContainer.innerHTML = "<p>No links provided.</p>";
+                return;
+            }
+
+            links.forEach((link, index) => {
+                const linkElement = document.createElement("p");
+                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
+                linksContainer.appendChild(linkElement);
+            });
         }
 
-        linkList.innerHTML = html;
-    }
-
-    // Display links when the page loads
-    displayLinks();
-</script>
-
+        // Call the displayLinks function when the page loads
+        window.onload = displayLinks;
+    </script>
 </body>
 </html>
