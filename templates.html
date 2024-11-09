@@ -96,7 +96,7 @@
     <label for="imageSelect">Select Image for QR Code:</label>
     <div>
       <!-- Replace with links to your images in the GitHub repository -->
-      <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/Download%20Scan%20Me%20Png%20for%20free.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image 1">
+      <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/Download Scan Me Png for free.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template Image 1">
       <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/image2.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template 2">
       <img src="https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/template/image3.jpg" class="template-image" onclick="setTemplate(this.src)" alt="Template 3">
     </div>
@@ -118,12 +118,12 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Get the QR code URL from the query string (from multipleqr.html)
+    // Function to get the QR code URL from the query string (from multipleqr.html)
     const urlParams = new URLSearchParams(window.location.search);
-    const originalQrData = urlParams.get("qr");
+    const originalQrData = urlParams.get("qr"); // Get the QR URL passed from multipleqr.html
 
     if (originalQrData) {
-      // Display the original QR code
+      // Display the original QR code if the URL parameter exists
       new QRCode(document.getElementById("originalQRCode"), {
         text: originalQrData,
         width: 150,
@@ -132,7 +132,7 @@
         colorLight: "#ffffff",
       });
     } else {
-      alert("No QR code URL found in the query parameters.");
+      document.getElementById("originalQRCode").innerText = "No QR code data received!";
     }
 
     let selectedTemplate = null;
@@ -143,13 +143,17 @@
       const modifiedQrContainer = document.getElementById("modifiedQRCode");
       modifiedQrContainer.innerHTML = ""; // Clear previous QR code
 
-      new QRCode(modifiedQrContainer, {
-        text: originalQrData,
-        width: 150,
-        height: 150,
-        colorDark: color,
-        colorLight: "#ffffff",
-      });
+      if (originalQrData) {
+        new QRCode(modifiedQrContainer, {
+          text: originalQrData,
+          width: 150,
+          height: 150,
+          colorDark: color,
+          colorLight: "#ffffff",
+        });
+      } else {
+        alert("No QR code data received from multipleqr.html!");
+      }
     }
 
     // Function to set the template image and overlay QR code
