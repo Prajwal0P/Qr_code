@@ -118,23 +118,23 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-// Get the QR code URL from the query string
+// Get the QR code content from the query string
 const urlParams = new URLSearchParams(window.location.search);
-const qrCodeURL = urlParams.get('qr'); // This will get the QR URL from the query parameter
-if (qrCodeURL) {
-   new QRCode(document.getElementById("originalQRCode"), {
-      text: qrCodeURL, // Using the passed URL
-      width: 150,
-      height: 150,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-   });
+const qrCodeContent = urlParams.get('qr'); // This will get the QR code content from the query parameter
+
+if (qrCodeContent) {
+  // Use the passed QR code content to generate the QR code
+  new QRCode(document.getElementById("originalQRCode"), {
+    text: qrCodeContent, // Use the content passed from multipleqr.html
+    width: 150,
+    height: 150,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+  });
 } else {
-   console.error('QR code URL is missing in the query parameters.');
+  console.error('QR code content is missing in the query parameters.');
 }
 
-
-let selectedTemplate = null;
 
 
     // Function to generate the modified QR code with color
