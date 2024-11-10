@@ -132,6 +132,44 @@
         .glow {
             box-shadow: 0 0 5px rgba(255, 153, 102, 0.8), 0 0 10px rgba(255, 153, 102, 0.5); /* Glow effect */
         }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4); /* Black background with transparency */
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 8px;
+    }
+
+    /* Close button */
+    .close-btn {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
     </style>
 </head>
 <body>
@@ -223,10 +261,26 @@
             <div id="qrcode" class="qr-code"></div>
             <div class="button-container">
                 <button class="btn btn-download hidden" id="downloadButton" onclick="downloadQRCode()">Download QR Code</button>
-                <button class="btn btn-templates hidden" id="templatesButton" onclick="redirectToTemplatePage()">Templates</button>
+                <button class="btn btn-templates hidden" id="templatesButton"onclick="showTemplateModal()">Templates</button>
             </div>
         </div>
     </div>
+       <!-- The Modal -->
+       <div id="templateModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeTemplateModal()">&times;</span>
+            <h2>Select Your Template</h2>
+            <p>Choose a template to customize your QR code.</p>
+            <!-- Add your template options or content here -->
+            <p>More templates coming soon!</p>
+        </div>
+    </div>
+
+    <!-- Add this inside your HTML form or anywhere before generating the QR code -->
+<label for="qrColor">Choose QR Code Color:</label>
+<input type="color" id="qrColor" name="qrColor" value="#000000">
+
+
 
 
     <script>
@@ -369,16 +423,21 @@ linkInput.addEventListener('blur', function() {
         // Create the full URL pointing to links.html with query parameters
         const qrUrl = "https://Prajwal0P.github.io/Qr_code/links.html?" + queryParams;
 
+           // Get the QR code color from the color picker
+    const qrColor = document.getElementById('qrColor').value;
+
         // Clear previous QR code
         const qrCodeElement = document.getElementById('qrcode');
         qrCodeElement.innerHTML = ''; // Clear previous QR codes
 
-        // Generate the QR code
-        new QRCode(qrCodeElement, {
-            text: qrUrl,
-            width: 256,
-            height: 256
-        });
+         // Generate the QR code with the selected color
+    new QRCode(qrCodeElement, {
+        text: qrUrl,
+        width: 256,
+        height: 256,
+        colorDark: qrColor,  // Set the color of the QR code's dark part (QR dots)
+        colorLight: "#ffffff" // Set the color of the light part (background)
+    });
     
             // Show the QR code box and buttons after generating the QR code
             document.getElementById('qrBox').style.display = 'flex'; // Change to flex to show
@@ -406,10 +465,25 @@ linkInput.addEventListener('blur', function() {
             link.click();
         }
 
-     function redirectToTemplatePage() {
-            const qrUrl = "https://Prajwal0P.github.io/Qr_code/links.html?" + new URLSearchParams(window.location.search).toString();
-            window.location.href = `templates.html?qr=${encodeURIComponent(qrUrl)}`;
-        }
+          // Function to show the modal
+function showTemplateModal() {
+    const modal = document.getElementById("templateModal");
+    modal.style.display = "block"; // Show the modal
+}
+
+// Function to close the modal
+function closeTemplateModal() {
+    const modal = document.getElementById("templateModal");
+    modal.style.display = "none"; // Hide the modal
+}
+
+// Close modal when the user clicks outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById("templateModal");
+    if (event.target == modal) {
+        modal.style.display = "none"; // Hide the modal if clicked outside
+    }
+}
 
     </script>
 
