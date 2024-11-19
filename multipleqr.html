@@ -281,6 +281,7 @@
 <input type="color" id="qrColor" name="qrColor" value="#000000">
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 
     <script>
@@ -393,57 +394,74 @@ linkInput.addEventListener('blur', function() {
 });
 
 
-    function generateQRCode() {
-        // Get the link values from the input fields
-        const link1 = document.getElementById('link1').value;
-        const link2 = document.getElementById('link2').value;
-        const link3 = document.getElementById('link3').value;
-        const link4 = document.getElementById('link4').value;
-        const link5 = document.getElementById('link5').value;
-        const link6 = document.getElementById('link6').value;
-        const link7 = document.getElementById('link7').value;
+function generateQRCode() {
+    // Get the link values from the input fields
+    const link1 = document.getElementById('link1').value;
+    const link2 = document.getElementById('link2').value;
+    const link3 = document.getElementById('link3').value;
+    const link4 = document.getElementById('link4').value;
+    const link5 = document.getElementById('link5').value;
+    const link6 = document.getElementById('link6').value;
+    const link7 = document.getElementById('link7').value;
 
-        // Check if at least one link is provided
-        if (!link1 && !link2 && !link3 && !link4 && !link5 && !link6 && !link7) {
-            alert("Please enter at least one link");
-            return;
-        }
+    // Check if at least one link is provided
+    if (!link1 && !link2 && !link3 && !link4 && !link5 && !link6 && !link7) {
+        alert("Please enter at least one link");
+        return;
+    }
 
-        // Construct the query parameters for the links
-        const queryParams = new URLSearchParams({
-            link1: encodeURIComponent(link1), 
-            link2: encodeURIComponent(link2),
-            link3: encodeURIComponent(link3),
-            link4: encodeURIComponent(link4),
-            link5: encodeURIComponent(link5),
-            link6: encodeURIComponent(link6),
-            link7: encodeURIComponent(link7)
-        }).toString();
+    // Construct the query parameters for the links
+    const queryParams = new URLSearchParams({
+        link1: encodeURIComponent(link1),
+        link2: encodeURIComponent(link2),
+        link3: encodeURIComponent(link3),
+        link4: encodeURIComponent(link4),
+        link5: encodeURIComponent(link5),
+        link6: encodeURIComponent(link6),
+        link7: encodeURIComponent(link7)
+    }).toString();
 
-        // Create the full URL pointing to links.html with query parameters
-        const qrUrl = "https://Prajwal0P.github.io/Qr_code/links.html?" + queryParams;
+    // Create the full URL pointing to links.html with query parameters
+    const qrUrl = "https://Prajwal0P.github.io/Qr_code/links.html?" + queryParams;
 
-           // Get the QR code color from the color picker
+    // Get the QR code color from the color picker
     const qrColor = document.getElementById('qrColor').value;
 
-        // Clear previous QR code
-        const qrCodeElement = document.getElementById('qrcode');
-        qrCodeElement.innerHTML = ''; // Clear previous QR codes
+    // Clear previous QR code
+    const qrCodeElement = document.getElementById('qrcode');
+    qrCodeElement.innerHTML = ''; // Clear previous QR codes
 
-         // Generate the QR code with the selected color
+    // Generate the QR code with smaller size and high error correction
     new QRCode(qrCodeElement, {
         text: qrUrl,
-        width: 256,
-        height: 256,
-        colorDark: qrColor,  // Set the color of the QR code's dark part (QR dots)
-        colorLight: "#ffffff" // Set the color of the light part (background)
+        width: 250, // Smaller width for the QR code
+        height: 250, // Smaller height for the QR code
+        colorDark: qrColor, // Set the color of the QR code's dark part (QR dots)
+        colorLight: "#ffffff", // Set the color of the light part (background)
+        correctLevel: QRCode.CorrectLevel.H // High error correction level
     });
-    
-            // Show the QR code box and buttons after generating the QR code
-            document.getElementById('qrBox').style.display = 'flex'; // Change to flex to show
-            document.getElementById('downloadButton').classList.remove('hidden');
-            document.getElementById('templatesButton').classList.remove('hidden');
-        }
+
+    // Show the QR code box and buttons after generating the QR code
+    document.getElementById('qrBox').style.display = 'flex'; // Change to flex to show
+    document.getElementById('downloadButton').classList.remove('hidden');
+    document.getElementById('templatesButton').classList.remove('hidden');
+}
+
+function downloadQRCode() {
+    // Get the canvas element where the QR code is generated
+    const canvas = document.querySelector("#qrcode canvas");
+
+    if (canvas) {
+        // Use canvas.toBlob() to convert the canvas to a Blob object
+        canvas.toBlob(function(blob) {
+            // Save the Blob as a PNG file using FileSaver.js
+            saveAs(blob, "qr_code.png"); // "qr_code.png" is the file name
+        });
+    } else {
+        alert("Please generate the QR code first!");
+    }
+}
+
 
         function resetFields() {
             for (let i = 1; i <= 7; i++) {
@@ -456,37 +474,37 @@ linkInput.addEventListener('blur', function() {
             document.getElementById('downloadButton').classList.add('hidden');
             document.getElementById('templatesButton').classList.add('hidden');
         }
+        function downloadQRCode() {
+    const canvas = document.querySelector("#qrcode canvas");
 
-function downloadQRCode() {
-    const canvas = document.querySelector('#qrcode canvas');
-    if (!canvas) {
-        alert('No QR code found to download.');
-        return;
+    if (canvas) {
+        // Create a new canvas element with padding (white background)
+        const newCanvas = document.createElement("canvas");
+        const ctx = newCanvas.getContext("2d");
+
+        const qrSize = canvas.width;  // Get QR code size
+        const padding = 20;  // Define padding around the QR code (white space)
+        const newCanvasSize = qrSize + padding * 2;  // New canvas size with padding
+
+        newCanvas.width = newCanvasSize;
+        newCanvas.height = newCanvasSize;
+
+        // Set the background to white
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+
+        // Draw the QR code onto the new canvas with padding
+        ctx.drawImage(canvas, padding, padding, qrSize, qrSize);
+
+        // Convert the new canvas to a Blob and download as PNG
+        newCanvas.toBlob(function(blob) {
+            saveAs(blob, "qr_code_with_white_background.png"); // Save the image as PNG with white background
+        });
+    } else {
+        alert("Please generate the QR code first!");
     }
-
-    // Set the target size to 300x300 pixels
-    const targetSize = 300; // Desired width and height in pixels
-
-    // Create a canvas with the target size
-    const highResCanvas = document.createElement('canvas');
-    highResCanvas.width = targetSize;
-    highResCanvas.height = targetSize;
-
-    const ctx = highResCanvas.getContext('2d');
-    ctx.fillStyle = 'white'; // Background color
-    ctx.fillRect(0, 0, highResCanvas.width, highResCanvas.height); // Fill background
-
-    // Scale the original canvas content to fit the target size
-    const scalingFactor = targetSize / canvas.width; // Scale to match the desired size
-    ctx.scale(scalingFactor, scalingFactor);
-    ctx.drawImage(canvas, 0, 0);
-
-    // Download the resized QR code as an image
-    const link = document.createElement('a');
-    link.href = highResCanvas.toDataURL('image/png', 1.0); // Maximum quality
-    link.download = 'qrcode-300x300.png';
-    link.click();
 }
+
 
 
 
