@@ -457,36 +457,40 @@ linkInput.addEventListener('blur', function() {
             document.getElementById('templatesButton').classList.add('hidden');
         }
 
-        function downloadQRCode() {
+      function downloadQRCode() {
     const canvas = document.querySelector('#qrcode canvas');
     if (!canvas) {
         alert('No QR code found to download.');
         return;
     }
 
-    // Set a higher scale for better quality
-    const scale = 10; // Increase this value for even higher resolution
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    // Set a moderate scale for high resolution and scannability
+    const scale = 4; // Moderate scale for good quality without being too large
+    const targetSize = 1024; // Maximum dimension for the QR code in pixels
 
-    // Create a high-resolution canvas
+    // Create a high-resolution canvas with target size
     const highResCanvas = document.createElement('canvas');
-    highResCanvas.width = canvasWidth * scale;
-    highResCanvas.height = canvasHeight * scale;
+    highResCanvas.width = targetSize;
+    highResCanvas.height = targetSize;
 
-    // Copy and scale the existing QR code onto the high-res canvas
     const ctx = highResCanvas.getContext('2d');
     ctx.fillStyle = 'white'; // Background color
     ctx.fillRect(0, 0, highResCanvas.width, highResCanvas.height); // Fill background
-    ctx.scale(scale, scale);
+
+    // Calculate the scale to fit the target size
+    const scalingFactor = targetSize / canvas.width;
+    ctx.scale(scalingFactor, scalingFactor);
+
+    // Draw the QR code onto the high-res canvas
     ctx.drawImage(canvas, 0, 0);
 
-    // Download the high-resolution QR code as an image
+    // Download the high-resolution QR code
     const link = document.createElement('a');
-    link.href = highResCanvas.toDataURL('image/png', 1.0); // Set image quality to maximum
-    link.download = 'qrcode-high-res.png';
+    link.href = highResCanvas.toDataURL('image/png', 1.0); // Maximum quality
+    link.download = 'qrcode-high-def.png';
     link.click();
 }
+
 
 
           // Function to show the modal
