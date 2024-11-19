@@ -457,18 +457,17 @@ linkInput.addEventListener('blur', function() {
             document.getElementById('templatesButton').classList.add('hidden');
         }
 
-      function downloadQRCode() {
+function downloadQRCode() {
     const canvas = document.querySelector('#qrcode canvas');
     if (!canvas) {
         alert('No QR code found to download.');
         return;
     }
 
-    // Set a moderate scale for high resolution and scannability
-    const scale = 4; // Moderate scale for good quality without being too large
-    const targetSize = 1024; // Maximum dimension for the QR code in pixels
+    // Set the target size to 300x300 pixels
+    const targetSize = 300; // Desired width and height in pixels
 
-    // Create a high-resolution canvas with target size
+    // Create a canvas with the target size
     const highResCanvas = document.createElement('canvas');
     highResCanvas.width = targetSize;
     highResCanvas.height = targetSize;
@@ -477,17 +476,15 @@ linkInput.addEventListener('blur', function() {
     ctx.fillStyle = 'white'; // Background color
     ctx.fillRect(0, 0, highResCanvas.width, highResCanvas.height); // Fill background
 
-    // Calculate the scale to fit the target size
-    const scalingFactor = targetSize / canvas.width;
+    // Scale the original canvas content to fit the target size
+    const scalingFactor = targetSize / canvas.width; // Scale to match the desired size
     ctx.scale(scalingFactor, scalingFactor);
-
-    // Draw the QR code onto the high-res canvas
     ctx.drawImage(canvas, 0, 0);
 
-    // Download the high-resolution QR code
+    // Download the resized QR code as an image
     const link = document.createElement('a');
     link.href = highResCanvas.toDataURL('image/png', 1.0); // Maximum quality
-    link.download = 'qrcode-high-def.png';
+    link.download = 'qrcode-300x300.png';
     link.click();
 }
 
