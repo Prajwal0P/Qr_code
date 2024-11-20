@@ -101,26 +101,27 @@
     </div>
 
     <script>
-        // Function to get the QR code data URL from the query parameter
+             // Function to get the QR code data from the URL query string
         function getQRCodeFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            const qrCodeData = urlParams.get('qrCode');
-
-            if (qrCodeData) {
-                return decodeURIComponent(qrCodeData); // Decode the URL-encoded QR code data
-            }
-            return null;
+            return urlParams.get('qrCode');
         }
 
-        // Function to display the QR code
+        // Function to display the QR code image on the page
         function displayQRCode() {
             const qrCodeDataURL = getQRCodeFromURL();
-            const qrCodeImageElement = document.getElementById("qrCodeImage");
-
             if (qrCodeDataURL) {
-                qrCodeImageElement.src = qrCodeDataURL; // Set the QR code image source to the data URL
+                const imgElement = document.createElement("img");
+                imgElement.src = qrCodeDataURL;  // Set the src to the QR code data URL
+                imgElement.alt = "Generated QR Code";  // Alt text for the image
+                imgElement.style.maxWidth = "300px";  // Set a max width for the image
+                imgElement.style.maxHeight = "300px";  // Set a max height for the image
+
+                const qrCodeDisplay = document.getElementById("qrCodeDisplay");
+                qrCodeDisplay.innerHTML = '';  // Clear any existing QR code
+                qrCodeDisplay.appendChild(imgElement);  // Append the new QR code image
             } else {
-                qrCodeImageElement.alt = "QR code not found.";
+                console.log("No QR code found in URL");
             }
         }
 
