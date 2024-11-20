@@ -261,19 +261,11 @@
             <div id="qrcode" class="qr-code"></div>
             <div class="button-container">
                 <button class="btn btn-download hidden" id="downloadButton" onclick="downloadQRCode()">Download QR Code</button>
-                <button class="btn btn-templates hidden" id="templatesButton"onclick="showTemplateModal()">Templates</button>
+                <button class="btn btn-templates hidden" id="templatesButton" onclick="window.location.href='https://Prajwal0P.github.io/Qr_code/templates.html'">Templates</button>
+
             </div>
         </div>
-    </div>
-       <!-- The Modal -->
-       <div id="templateModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeTemplateModal()">&times;</span>
-            <h2>Select Your Template</h2>
-            <p>Choose a template to customize your QR code.</p>
-            <!-- Add your template options or content here -->
-            <p>More templates coming soon!</p>
-        </div>
+    </div>   
     </div>
 
     <!-- Add this inside your HTML form or anywhere before generating the QR code -->
@@ -333,6 +325,9 @@
         alert(`Please enter a valid ${platform.charAt(0).toUpperCase() + platform.slice(1)} link.`);
     }
 }
+const qrCodeDataURL = qrElement.toDataURL(); // Assuming qrElement is the generated QR code image element
+const templatesPageURL = `templates.html?qrCode=${encodeURIComponent(qrCodeDataURL)}`;
+window.location.href = templatesPageURL;
 
 
         // Function to reduce opacity of other logos and input boxes
@@ -447,20 +442,6 @@ function generateQRCode() {
     document.getElementById('templatesButton').classList.remove('hidden');
 }
 
-function downloadQRCode() {
-    // Get the canvas element where the QR code is generated
-    const canvas = document.querySelector("#qrcode canvas");
-
-    if (canvas) {
-        // Use canvas.toBlob() to convert the canvas to a Blob object
-        canvas.toBlob(function(blob) {
-            // Save the Blob as a PNG file using FileSaver.js
-            saveAs(blob, "qr_code.png"); // "qr_code.png" is the file name
-        });
-    } else {
-        alert("Please generate the QR code first!");
-    }
-}
 
 
         function resetFields() {
@@ -502,29 +483,6 @@ function downloadQRCode() {
         });
     } else {
         alert("Please generate the QR code first!");
-    }
-}
-
-
-
-
-          // Function to show the modal
-function showTemplateModal() {
-    const modal = document.getElementById("templateModal");
-    modal.style.display = "block"; // Show the modal
-}
-
-// Function to close the modal
-function closeTemplateModal() {
-    const modal = document.getElementById("templateModal");
-    modal.style.display = "none"; // Hide the modal
-}
-
-// Close modal when the user clicks outside of it
-window.onclick = function(event) {
-    const modal = document.getElementById("templateModal");
-    if (event.target == modal) {
-        modal.style.display = "none"; // Hide the modal if clicked outside
     }
 }
 
