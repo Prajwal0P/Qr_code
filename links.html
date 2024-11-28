@@ -25,24 +25,40 @@
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
+            
         }
         .link-item {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .link-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        a {
-            text-decoration: none;
-            color: #0078d4;
-            font-weight: bold;
-        }
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Align logo and link text */
+    width: 100%; /* Make it responsive */
+    max-width: 400px; /* Set a max width for the box */
+    overflow: hidden; /* Prevent content from overflowing */
+    text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+    white-space: nowrap; /* Prevent text from wrapping to the next line */
+}
+
+.link-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+a {
+    text-decoration: none;
+    color: #0078d4;
+    font-weight: bold;
+    flex: 1; /* Let the link take the remaining space */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
         .no-links {
             color: #888;
             font-size: 1.2em;
