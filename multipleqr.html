@@ -236,7 +236,7 @@
             </span>
             <input type="text" id="link6" class="form-control" placeholder="Enter Snapchat link" 
             onfocus="dimElements('link6'); addGlow('link6')" 
-            onblur="validateLink('link6', 'linkedin')">
+            onblur="validateLink('link6', 'snapchat')">
         </div>
         
         <!-- Tinder -->
@@ -297,14 +297,20 @@
             regex = /^(https?:\/\/)?(www\.)?(instagram\.com)\/.+$/;
             break;
         case 'linkedin':
-            regex = /^(https?:\/\/)?(www\.)?(linkedin\.com)\/(in|company|school|posts|groups|jobs|learning)\/[\w-]+\/?$/;
+            regex = /^(https?:\/\/)?((\w{2,3}\.)?linkedin\.com)\/(in|company|school|posts|groups|jobs|learning)\/[\w-]+\/?$/;
             break;
-        case 'snapchat':
-            regex = /^(https?:\/\/)?(www\.)?(snapchat\.com)\/.+$/; // Corrected
-            break;
+
+            case 'snapchat':
+    // Regex to validate Snapchat add links like https://www.snapchat.com/add/username
+    regex = /^(https?:\/\/)?(www\.)?snapchat\.com\/add\/[\w-]+\/?$/;
+    break;
+
+
+
         case 'tinder':
-            regex = /^(https?:\/\/)?(www\.)?(tinder\.com)\/.+$/; // Corrected
+            regex = /^(https?:\/\/)?(www\.)?tinder\.com\/(profile|app|.+)$/;
             break;
+
         default:
             regex = null;
             break;
