@@ -3,192 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Templates</title>
+    <title>Your Links</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* General page styling */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            color: #333;
+            background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
+            color: #212529;
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
         }
-
-        /* Navigation Bar */
-        nav {
-            background-color: #333;
-            padding: 15px 20px;
-        }
-
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: flex-start;
-        }
-
-        nav ul li {
-            margin-right: 20px;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 5px 10px;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #ff6600;
-        }
-
-        /* Container for QR code display */
-        #qrCodeContainer {
+        .link-list {
+            margin-top: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            margin-top: 30px;
+            align-items: center; /* Center logos horizontally */
         }
-
-        /* Styling for the QR Code */
-        #qrCodeContainer img {
-            max-width: 200px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        .container-box {
+            background-color: rgba(255, 255, 255, 0.5); /* Transparent white background */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Padding inside the container */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow for the container */
         }
-
-        /* Template selection styling */
-        .templates-container {
+        .logo-box {
+            margin: 10px 0; /* Space between logo boxes */
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.7); /* Border color */
+            border-radius: 10px; /* Rounded corners */
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+            justify-content: center; /* Center logo */
+            align-items: center; /* Center logo */
+            transition: transform 0.3s; /* Smooth animation */
         }
-
-        .template-box {
-            width: 100px;
-            height: 100px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .logo {
+            width: 50px; /* Logo size */
+            height: 50px; /* Logo size */
+            border-radius: 50%; /* Round edges for logos */
+            transition: transform 0.3s; /* Smooth scaling on hover */
         }
-
-        .template-box:hover {
-            transform: scale(1.1);
+        .logo-box:hover {
+            transform: scale(1.05); /* Scale logo box on hover */
         }
-
-        /* Color picker section */
-        .color-picker {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .color-picker input {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .color-picker button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .color-picker button:hover {
-            background-color: #45a049;
+        .logo:hover {
+            transform: scale(1.1); /* Scale logo on hover */
         }
     </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="templates.html">Templates</a></li>
-        </ul>
-    </nav>
 
-    <div id="qrCodeContainer">
-        <!-- The QR code will be pasted here -->
+<div class="container">
+    <h1 class="text-center text-white">Your Links</h1>
+    <div class="container-box">
+        <div class="link-list" id="linkList"></div>
     </div>
+</div>
 
-    <div class="color-picker">
-        <label for="qrColor">Choose QR Code Color:</label>
-        <input type="color" id="qrColor" name="qrColor" value="#000000">
-        <button onclick="applyColor()">Apply Color</button>
-    </div>
+<script>
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            link1: params.get('link1'),
+            link2: params.get('link2'),
+            link3: params.get('link3'),
+            link4: params.get('link4'),
+            link5: params.get('link5'),
+            link6: params.get('link6'),
+            link7: params.get('link7')
+        };
+    }
 
-    <div class="templates-container">
-        <!-- Template options will be displayed here -->
-        <div class="template-box" onclick="applyTemplate('template1')">Template 1</div>
-        <div class="template-box" onclick="applyTemplate('template2')">Template 2</div>
-        <div class="template-box" onclick="applyTemplate('template3')">Template 3</div>
-    </div>
+    function displayLinks() {
+        const links = getQueryParams();
+        const linkList = document.getElementById('linkList');
+        const logos = {
+            link1: {
+                url: links.link1 || "https://www.youtube.com", // Default to YouTube if no link is provided
+                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download Youtube logo png, youtube icon transparent.jpg" // YouTube logo
+            },
+            link2: {
+                url: links.link2 || "https://www.facebook.com", // Default to Facebook
+                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos//facebook logos vector (AI, EPS, SVG, PDF, CDR) free download.jpg" // Facebook logo
+            },
+            link3: {
+                url: links.link3 || "https://www.x.com", // Default to X
+                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos//X Daily News (@xDaily) on X.jpg"// X logo
+            },
+            link4: {
+                url: links.link4 || "https://www.instagram.com", // Default to Instagram
+                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download (11).jpg"// Instagram logo
+            },
+            link5: {
+                url: links.link5 || "https://www.linkedin.com", // Default to LinkedIn
+                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download Linkedin logo png, Linkedin logo transparent png, Linkedin icon transparent free png.jpg" // LinkedIn logo
+            },
+            link6: {
+                url: links.link6 || "https://www.snapchat.com", // Default to Snapchat
+                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile app snapchat snapchat logo colored icon - Download in SVG, PNG.jpg" // Snapchat logo
+            },
+            link7: {
+                url: links.link7 || "https://www.tinder.com", // Default to Tinder
+                img: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium Vector _ Tinder icon in paper cut style Social media icons.jpg" // Tinder logo
+            }
+        };
 
-    <script>
-        // Function to retrieve QR code data from URL and display it in the page
-        function pasteQRCode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const qrCodeDataURL = urlParams.get('qrCode');
-            
-            if (qrCodeDataURL) {
-                const qrImage = document.createElement('img');
-                qrImage.src = qrCodeDataURL; // Set the source to the QR code data URL
-                qrImage.alt = "Generated QR Code";
-                qrImage.id = "qrImage"; // Set an ID for the image to easily access it later
-                document.getElementById('qrCodeContainer').appendChild(qrImage);
-            } else {
-                console.log("No QR code data found in the URL.");
+        let html = '';
+
+        for (const key in links) {
+            if (links[key]) {
+                html += `
+                    <div class="logo-box">
+                        <a href="${logos[key].url}" target="_blank">
+                            <img src="${logos[key].img}" alt="${key}" class="logo">
+                        </a>
+                    </div>
+                `;
             }
         }
 
-        // Function to apply color to the QR code
-        function applyColor() {
-            const qrColor = document.getElementById('qrColor').value;
-            const qrImage = document.getElementById('qrImage');
-
-            if (qrImage) {
-                // Apply color change to the QR code image
-                qrImage.style.filter = `invert(100%) sepia(100%) saturate(1000%) hue-rotate(${qrColor})`;
-            } else {
-                console.log("QR code image not found.");
-            }
+        if (html === '') {
+            html = '<p>No links found.</p>';
         }
 
-        // Function to apply template to the QR code (simplified for demo purposes)
-        function applyTemplate(templateName) {
-            const qrImage = document.getElementById('qrImage');
+        linkList.innerHTML = html;
+    }
 
-            if (qrImage) {
-                // Apply the template to the QR code (this can be customized based on your templates)
-                if (templateName === 'template1') {
-                    qrImage.style.border = "5px solid red";
-                } else if (templateName === 'template2') {
-                    qrImage.style.border = "5px solid blue";
-                } else if (templateName === 'template3') {
-                    qrImage.style.border = "5px solid green";
-                }
-            } else {
-                console.log("QR code image not found.");
-            }
-        }
+    // Display links when the page loads
+    displayLinks();
+</script>
 
-        // Call pasteQRCode when the page loads
-        window.onload = pasteQRCode;
-    </script>
 </body>
 </html>
