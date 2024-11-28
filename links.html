@@ -94,10 +94,13 @@
 
         // Mapping of links to logos (you can add more mappings as needed)
         const logoMapping = {
-            "youtube": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download_Youtube_logo.png",
-            "facebook": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook_logo.png",
-            "instagram": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/instagram_logo.png",
-            "twitter": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/twitter_logo.png"
+            "youtube": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/yt.jpg",
+            "facebook": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/fb.jpg",
+            "twitter": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/x.jpg",
+            "instagram": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/insta.jpg",
+            "linkedin": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/linkedin.jpg",
+            "snapchat": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/snap.jpg",
+            "tinder": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/tinder.jpg",
         };
 
         // Display links if available, otherwise show the no-links message
@@ -110,10 +113,16 @@
                     logoUrl = logoMapping.youtube;
                 } else if (link.includes("facebook")) {
                     logoUrl = logoMapping.facebook;
-                } else if (link.includes("instagram")) {
-                    logoUrl = logoMapping.instagram;
                 } else if (link.includes("twitter")) {
                     logoUrl = logoMapping.twitter;
+                } else if (link.includes("instagram")) {
+                    logoUrl = logoMapping.instagram;
+                }else if (link.includes("linkedin")) {
+                    logoUrl = logoMapping.linkedin;
+                }else if (link.includes("snapchat")) {
+                    logoUrl = logoMapping.snapchat;
+                }else if (link.includes("tinder")) {
+                    logoUrl = logoMapping.tinder;
                 }
                 // Add other conditions for more links if necessary
 
