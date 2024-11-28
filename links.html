@@ -92,16 +92,16 @@
         const linksContainer = document.getElementById('links');
         const noLinksMessage = document.getElementById('no-links');
 
-        // Mapping of links to logos (you can add more mappings as needed)
-        const logoMapping = {
-            "youtube": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/yt.jpg",
-            "facebook": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/fb.jpg",
-            "x": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/x.jpg",
-            "instagram": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/insta.jpg",
-            "linkedin": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/linkedin.jpg",
-            "snapchat": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/snap.jpg",
-            "tinder": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/tinder.jpg",
-        };
+const logoMapping = {
+    "youtube": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/yt.jpg",
+    "facebook": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/fb.jpg",
+    "x": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/x.jpg",
+    "instagram": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/insta.jpg",
+    "linkedin": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/linkedin.jpg",
+    "snapchat": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/snap.jpg",
+    "tinder": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/tinder.jpg",
+};
+
 
         // Display links if available, otherwise show the no-links message
         if (links.length > 0) {
