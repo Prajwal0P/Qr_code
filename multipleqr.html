@@ -389,15 +389,17 @@ linkInput.addEventListener('blur', function() {
 });
 
 
-function generateQRCode() {
-    // Get the link values from the input fields
-    const link1 = document.getElementById('link1').value;
-    const link2 = document.getElementById('link2').value;
-    const link3 = document.getElementById('link3').value;
-    const link4 = document.getElementById('link4').value;
-    const link5 = document.getElementById('link5').value;
-    const link6 = document.getElementById('link6').value;
-    const link7 = document.getElementById('link7').value;
+async function generateQRCode() {
+    // Get link values
+    const links = {
+        link1: document.getElementById('link1').value,
+        link2: document.getElementById('link2').value,
+        link3: document.getElementById('link3').value,
+        link4: document.getElementById('link4').value,
+        link5: document.getElementById('link5').value,
+        link6: document.getElementById('link6').value,
+        link7: document.getElementById('link7').value
+    };
 
     // Check if at least one link is provided
     if (!link1 && !link2 && !link3 && !link4 && !link5 && !link6 && !link7) {
@@ -416,24 +418,24 @@ function generateQRCode() {
         link7: encodeURIComponent(link7)
     }).toString();
 
-    // Create the full URL pointing to links.html with query parameters
-    const qrUrl = "https://Prajwal0P.github.io/Qr_code/links.html?" + queryParams;
 
-    // Get the QR code color from the color picker
-    const qrColor = document.getElementById('qrColor').value;
+        // Encode links as Base64 JSON
+    const encodedLinks = btoa(JSON.stringify(links));
+    const qrUrl = `https://Prajwal0P.github.io/Qr_code/links.html?data=${encodedLinks}`;
+
 
     // Clear previous QR code
     const qrCodeElement = document.getElementById('qrcode');
     qrCodeElement.innerHTML = ''; // Clear previous QR codes
 
-    // Generate the QR code with smaller size and high error correction
+   // Generate QR code
     new QRCode(qrCodeElement, {
         text: qrUrl,
-        width: 250, // Smaller width for the QR code
-        height: 250, // Smaller height for the QR code
-        colorDark: qrColor, // Set the color of the QR code's dark part (QR dots)
-        colorLight: "#ffffff", // Set the color of the light part (background)
-        correctLevel: QRCode.CorrectLevel.H // High error correction level
+        width: 250,
+        height: 250,
+        colorDark: qrColor,
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
     });
 
     // Show the QR code box and buttons after generating the QR code
