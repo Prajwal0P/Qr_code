@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Links</title>
+    <title>Links Page</title>
     <style>
-        /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #6e7dff, #00bcd4);
+            background-color: #f4f4f9;
             color: #333;
             margin: 0;
             padding: 0;
@@ -17,103 +16,37 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            overflow: hidden;
         }
-
         h1 {
-            color: #fff;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #0078d4;
         }
-
-        /* Links Container */
         .links-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
             margin-top: 20px;
-            width: 90%;
-            max-width: 800px;
-            padding: 15px;
-            box-sizing: border-box;
         }
-
-        /* Link Item Styles */
         .link-item {
-            display: flex;
-            align-items: center;
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 10px 15px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            text-decoration: none;
-            color: #333;
-            overflow: hidden;
-            word-wrap: break-word;
-            flex-wrap: wrap;
         }
-
         .link-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-
-        .logo {
-            width: 40px;
-            height: 40px;
-            margin-right: 15px;
-            border-radius: 50%;
-        }
-
         a {
             text-decoration: none;
             color: #0078d4;
             font-weight: bold;
-            flex-grow: 1;
-            word-wrap: break-word;
         }
-
-        /* No Links Message */
         .no-links {
-            color: #fff;
+            color: #888;
             font-size: 1.2em;
             margin-top: 20px;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .links-container {
-                width: 100%;
-                padding: 10px;
-            }
-
-            .link-item {
-                flex-direction: row;
-                justify-content: flex-start;
-                text-align: center;
-            }
-
-            .logo {
-                width: 30px;
-                height: 30px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                width: 25px;
-                height: 25px;
-            }
-
-            .link-item {
-                padding: 8px 12px;
-            }
-
-            a {
-                font-size: 14px;
-            }
         }
     </style>
 </head>
@@ -123,68 +56,35 @@
     <div id="no-links" class="no-links" style="display: none;">
         No links were provided. Please generate a QR code with valid links.
     </div>
-
     <script>
         // Parse the URL parameters
         const urlParams = new URLSearchParams(window.location.search);
 
-        // Array to store links and associated logos
-        const links = {
-            link1: urlParams.get('link1'),
-            link2: urlParams.get('link2'),
-            link3: urlParams.get('link3'),
-            link4: urlParams.get('link4'),
-            link5: urlParams.get('link5'),
-            link6: urlParams.get('link6'),
-            link7: urlParams.get('link7')
-        };
+        // Array to store links
+        const links = [];
 
-        // Logos for each link type
-        const logos = {
-            youtube: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Youtube%20logo%20png%2C%20youtube%20icon%20transparent.jpg",
-            facebook: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook%20logos%20vector%20%28AI%2C%20EPS%2C%20SVG%2C%20PDF%2C%20CDR%29%20free%20download.jpg",
-            x: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/X%20Daily%20News%20%28%40xDaily%29%20on%20X.jpg",
-            instagram: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download%20%2811%29.jpg",
-            linkedin: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download%20Linkedin%20logo%20png%2C%20Linkedin%20logo%20transparent%20png%2C%20Linkedin%20icon%20transparent%20free%20png.jpg",
-            snapchat: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile%20app%20snapchat%20snapchat%20logo%20colored%20icon%20-%20Download%20in%20SVG%2C%20PNG.jpg",
-            tinder: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium%20Vector%20_%20Tinder%20icon%20in%20paper%20cut%20style%20Social%20media%20icons.jpg"
-        };
+        // Loop through the parameters to collect links
+        for (let [key, value] of urlParams.entries()) {
+            if (value) {
+                links.push(decodeURIComponent(value));
+            }
+        }
 
         // Get the container elements
         const linksContainer = document.getElementById('links');
         const noLinksMessage = document.getElementById('no-links');
 
         // Display links if available, otherwise show the no-links message
-        let displayedLinks = false;
-
-        for (const key in links) {
-            const link = links[key];
-            if (link) {
-                displayedLinks = true;
-                let platform = "unknown"; // Default if no platform matches
-                if (link.includes("youtube")) platform = "youtube";
-                else if (link.includes("facebook")) platform = "facebook";
-                else if (link.includes("twitter") || link.includes("x.com")) platform = "x";
-                else if (link.includes("instagram")) platform = "instagram";
-                else if (link.includes("linkedin")) platform = "linkedin";
-                else if (link.includes("snapchat")) platform = "snapchat";
-                else if (link.includes("tinder")) platform = "tinder";
-
-                const logoUrl = logos[platform] || logos["unknown"]; // Fallback to a default logo if not found
-
+        if (links.length > 0) {
+            links.forEach((link) => {
                 const linkElement = document.createElement('div');
                 linkElement.classList.add('link-item');
-                linkElement.innerHTML = `
-                    <img src="${logoUrl}" alt="${platform} logo" class="logo">
-                    <a href="${link}" target="_blank">${link}</a>
-                `;
+                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
                 linksContainer.appendChild(linkElement);
-            }
-        }
-
-        if (!displayedLinks) {
+            });
+        } else {
             noLinksMessage.style.display = 'block';
         }
     </script>
 </body>
-</html>
+</html> 
