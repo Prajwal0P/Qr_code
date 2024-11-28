@@ -25,40 +25,41 @@
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
-            
         }
         .link-item {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Align logo and link text */
-    width: 100%; /* Make it responsive */
-    max-width: 400px; /* Set a max width for the box */
-    overflow: hidden; /* Prevent content from overflowing */
-    text-overflow: ellipsis; /* Add ellipsis for overflowing text */
-    white-space: nowrap; /* Prevent text from wrapping to the next line */
-}
-
-.link-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-a {
-    text-decoration: none;
-    color: #0078d4;
-    font-weight: bold;
-    flex: 1; /* Let the link take the remaining space */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Align logo and link text */
+            width: 100%; /* Make it responsive */
+            max-width: 400px; /* Set a max width for the box */
+            overflow: hidden; /* Prevent content from overflowing */
+            text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+            white-space: nowrap; /* Prevent text from wrapping to the next line */
+        }
+        .link-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .link-item img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px; /* Space between the logo and the link */
+        }
+        a {
+            text-decoration: none;
+            color: #0078d4;
+            font-weight: bold;
+            flex: 1; /* Let the link take the remaining space */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
         .no-links {
             color: #888;
             font-size: 1.2em;
@@ -72,6 +73,7 @@ a {
     <div id="no-links" class="no-links" style="display: none;">
         No links were provided. Please generate a QR code with valid links.
     </div>
+
     <script>
         // Parse the URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -90,12 +92,38 @@ a {
         const linksContainer = document.getElementById('links');
         const noLinksMessage = document.getElementById('no-links');
 
+        // Mapping of links to logos (you can add more mappings as needed)
+        const logoMapping = {
+            "youtube": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download_Youtube_logo.png",
+            "facebook": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook_logo.png",
+            "instagram": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/instagram_logo.png",
+            "twitter": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/twitter_logo.png"
+        };
+
         // Display links if available, otherwise show the no-links message
         if (links.length > 0) {
             links.forEach((link) => {
+                // Determine the logo based on the link (you can improve this matching logic as per your needs)
+                let logoUrl = "";
+                
+                if (link.includes("youtube")) {
+                    logoUrl = logoMapping.youtube;
+                } else if (link.includes("facebook")) {
+                    logoUrl = logoMapping.facebook;
+                } else if (link.includes("instagram")) {
+                    logoUrl = logoMapping.instagram;
+                } else if (link.includes("twitter")) {
+                    logoUrl = logoMapping.twitter;
+                }
+                // Add other conditions for more links if necessary
+
+                // Create the link element with a logo
                 const linkElement = document.createElement('div');
                 linkElement.classList.add('link-item');
-                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
+                linkElement.innerHTML = `
+                    <img src="${logoUrl}" alt="Logo" class="link-logo">
+                    <a href="${link}" target="_blank">${link}</a>
+                `;
                 linksContainer.appendChild(linkElement);
             });
         } else {
@@ -103,4 +131,4 @@ a {
         }
     </script>
 </body>
-</html> 
+</html>
