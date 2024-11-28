@@ -94,7 +94,7 @@
 
         // Mapping of links to logos (you can add more mappings as needed)
         const logoMapping = {
-            "youtube": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/yt.jpg",
+            "yt": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/yt.jpg",
             "facebook": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/fb.jpg",
             "x": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/x.jpg",
             "instagram": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/insta.jpg",
@@ -109,8 +109,8 @@
                 // Determine the logo based on the link (you can improve this matching logic as per your needs)
                 let logoUrl = "";
                 
-                if (link.includes("youtube")) {
-                    logoUrl = logoMapping.youtube;
+                if (link.includes("yt")) {
+                    logoUrl = logoMapping.yt;
                 } else if (link.includes("facebook")) {
                     logoUrl = logoMapping.facebook;
                 } else if (link.includes("x")) {
