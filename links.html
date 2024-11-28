@@ -109,22 +109,21 @@
                 // Determine the logo based on the link (you can improve this matching logic as per your needs)
                 let logoUrl = "";
                 
-                if (link.includes("yt")) {
-                    logoUrl = logoMapping.yt;
-                } else if (link.includes("facebook")) {
-                    logoUrl = logoMapping.facebook;
-                } else if (link.includes("x")) {
-                    logoUrl = logoMapping.x;
-                } else if (link.includes("instagram")) {
-                    logoUrl = logoMapping.instagram;
-                }else if (link.includes("linkedin")) {
-                    logoUrl = logoMapping.linkedin;
-                }else if (link.includes("snapchat")) {
-                    logoUrl = logoMapping.snapchat;
-                }else if (link.includes("tinder")) {
-                    logoUrl = logoMapping.tinder;
-                }
-                // Add other conditions for more links if necessary
+                if (link.includes("youtube")) {
+            logoUrl = logoMapping.youtube;
+        } else if (link.includes("facebook")) {
+            logoUrl = logoMapping.facebook;
+        } else if (link.includes("x")) {
+            logoUrl = logoMapping.x;
+        } else if (link.includes("instagram")) {
+            logoUrl = logoMapping.instagram;
+        } else if (link.includes("linkedin")) {
+            logoUrl = logoMapping.linkedin;
+        } else if (link.includes("snapchat")) {
+            logoUrl = logoMapping.snapchat;
+        } else if (link.includes("tinder")) {
+            logoUrl = logoMapping.tinder;
+        }
 
                 // Create the link element with a logo
                 const linkElement = document.createElement('div');
