@@ -3,88 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Links Page</title>
+    <title>Your Links</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
+            color: #212529;
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
         }
-        h1 {
-            color: #0078d4;
-        }
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .link-list {
             margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center; /* Center align logos */
         }
-        .link-item {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        .container-box {
+            background-color: rgba(255, 255, 255, 0.5); /* Transparent white background */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Padding inside the container */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow for the container */
         }
-        .link-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        .logo-box {
+            width: 120px; /* Fixed size for logo box */
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.7); /* Border color */
+            border-radius: 10px; /* Rounded corners */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center logo */
+            align-items: center; /* Center logo */
+            transition: transform 0.3s; /* Smooth animation */
+        }
+        .logo {
+            width: 50px; /* Logo size */
+            height: 50px; /* Logo size */
+            margin-bottom: 10px; /* Space between logo and link */
+            border-radius: 50%; /* Round edges for logos */
+            transition: transform 0.3s; /* Smooth scaling on hover */
+        }
+        .logo-box:hover {
+            transform: scale(1.05); /* Scale logo box on hover */
         }
         a {
             text-decoration: none;
-            color: #0078d4;
-            font-weight: bold;
+            color: #212529; /* Link color */
+            text-align: center;
+            font-size: 14px;
         }
-        .no-links {
-            color: #888;
-            font-size: 1.2em;
-            margin-top: 20px;
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Your Links</h1>
-    <div id="links" class="links-container"></div>
-    <div id="no-links" class="no-links" style="display: none;">
-        No links were provided. Please generate a QR code with valid links.
+
+<div class="container">
+    <h1 class="text-center text-white">Your Links</h1>
+    <div class="container-box">
+        <div class="link-list" id="linkList"></div>
     </div>
-    <script>
-        // Parse the URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
+</div>
 
-        // Array to store links
-        const links = [];
+<script>
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            link1: params.get('link1'),
+            link2: params.get('link2'),
+            link3: params.get('link3'),
+            link4: params.get('link4'),
+            link5: params.get('link5'),
+            link6: params.get('link6'),
+            link7: params.get('link7')
+        };
+    }
 
-        // Loop through the parameters to collect links
-        for (let [key, value] of urlParams.entries()) {
-            if (value) {
-                links.push(decodeURIComponent(value));
+    function displayLinks() {
+        const links = getQueryParams();
+        const linkList = document.getElementById('linkList');
+        const logos = {
+            link1: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download Youtube logo png, youtube icon transparent.jpg", // YouTube logo
+            link2: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/facebook logos vector (AI, EPS, SVG, PDF, CDR) free download.jpg", // Facebook logo
+            link3: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/X Daily News (@xDaily) on X.jpg", // X logo
+            link4: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logo/download (11).jpg", // Instagram logo
+            link5: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Download Linkedin logo png, Linkedin logo transparent png, Linkedin icon transparent free png.jpg", // LinkedIn logo
+            link6: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Mobile app snapchat snapchat logo colored icon - Download in SVG, PNG.jpg", // Snapchat logo
+            link7: "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/Premium Vector _ Tinder icon in paper cut style Social media icons.jpg" // Tinder logo
+        };
+
+        let html = '';
+
+        for (const key in links) {
+            if (links[key]) {
+                html += `
+                    <div class="logo-box">
+                        <img src="${logos[key]}" alt="${key}" class="logo">
+                        <a href="${links[key]}" target="_blank">${links[key]}</a>
+                    </div>
+                `;
             }
         }
 
-        // Get the container elements
-        const linksContainer = document.getElementById('links');
-        const noLinksMessage = document.getElementById('no-links');
-
-        // Display links if available, otherwise show the no-links message
-        if (links.length > 0) {
-            links.forEach((link) => {
-                const linkElement = document.createElement('div');
-                linkElement.classList.add('link-item');
-                linkElement.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
-                linksContainer.appendChild(linkElement);
-            });
-        } else {
-            noLinksMessage.style.display = 'block';
+        if (html === '') {
+            html = '<p class="text-center">No links found.</p>';
         }
-    </script>
+
+        linkList.innerHTML = html;
+    }
+
+    // Display links when the page loads
+    displayLinks();
+</script>
+
 </body>
 </html>
