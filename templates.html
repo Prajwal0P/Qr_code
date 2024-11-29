@@ -12,17 +12,17 @@
     </div>
 
     <script>
-        // Retrieve the QR code Data URL from the query string
-        const urlParams = new URLSearchParams(window.location.search);
-        const qrCodeDataURL = urlParams.get('qrCode');
+    // Retrieve the QR code Data URL from sessionStorage
+const qrCodeDataURL = sessionStorage.getItem('qrCodeData');
 
-        // If the qrCodeDataURL exists, set it as the image source
-        if (qrCodeDataURL) {
-            const qrCodeImage = document.getElementById('qrCodeImage');
-            qrCodeImage.src = qrCodeDataURL;  // Set the image source to the Data URL
-        } else {
-            console.log("No QR code found in the URL");  // Log if no QR code is passed
-        }
+// If qrCodeDataURL exists, set it as the image source
+if (qrCodeDataURL) {
+    const qrCodeImage = document.getElementById('qrCodeImage');
+    qrCodeImage.src = qrCodeDataURL;  // Set the image source to the Data URL
+} else {
+    console.log("No QR code found in session storage");
+}
+
     </script>
 </body>
 </html>
