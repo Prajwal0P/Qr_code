@@ -12,15 +12,18 @@
     </div>
 
     <script>
-    // Retrieve the QR code Data URL from sessionStorage
-const qrCodeDataURL = sessionStorage.getItem('qrCodeData');
+// Retrieve the Blob URL from the query string
+const urlParams = new URLSearchParams(window.location.search);
+const qrCodeBlobURL = urlParams.get('qrCode');
 
-// If qrCodeDataURL exists, set it as the image source
-if (qrCodeDataURL) {
+// If qrCodeBlobURL exists, set it as the image source
+if (qrCodeBlobURL) {
     const qrCodeImage = document.getElementById('qrCodeImage');
-    qrCodeImage.src = qrCodeDataURL;  // Set the image source to the Data URL
+    qrCodeImage.src = qrCodeBlobURL;  // Set the image source to the Blob URL
 } else {
-    console.log("No QR code found in session storage");
+    console.log("No QR code found in the URL");
+}
+
 }
 
     </script>
