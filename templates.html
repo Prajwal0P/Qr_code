@@ -36,17 +36,21 @@
         <!-- QR Code will be displayed here -->
         <img id="qrCodeImage" src="" alt="Generated QR Code">
     </div>
+<script>
+  window.onload = function() {
+    // Retrieve the saved QR code from localStorage
+    const qrImageUrl = localStorage.getItem('generatedQRCode');
 
-    <script>
-        // Get the QR code image URL from localStorage
-        const qrImageUrl = localStorage.getItem('generatedQRCode');
+    // Check if the QR code is available in localStorage
+    if (qrImageUrl) {
+      // Set the image source to the saved QR code URL
+      const qrCodeImage = document.getElementById('qrCodeImage');
+      qrCodeImage.src = qrImageUrl;
+    } else {
+      console.log('No QR code found in localStorage');
+    }
+  };
+</script>
 
-        // If the QR code exists, display it
-        if (qrImageUrl) {
-            document.getElementById('qrCodeImage').src = qrImageUrl;
-        } else {
-            alert("No QR code found.");
-        }
-    </script>
 </body>
 </html>
