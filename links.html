@@ -93,23 +93,22 @@
         const noLinksMessage = document.getElementById('no-links');
 
 const logoMapping = {
-    "youtube": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/yt.jpg",
-    "facebook": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/fb.jpg",
-    "x": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/x.jpg",
-    "instagram": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/insta.jpg",
-    "linkedin": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/linkedin.jpg",
-    "snapchat": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/snap.jpg",
-    "tinder": "https://raw.githubusercontent.com/Prajwal0P/Qr_code/main/logos/tinder.jpg",
+    "youtube": "logos/yt.jpg",
+    "facebook": "logos/fb.jpg",
+    "x": "logos/x.jpg",
+    "instagram": "logos/insta.jpg",
+    "linkedin": "logos/linkedin.jpg",
+    "snapchat": "logos/snap.jpg",
+    "tinder": "logos/tinder.jpg",
 };
 
+// Display links if available, otherwise show the no-links message
+if (links.length > 0) {
+    links.forEach((link) => {
+        let logoUrl = "";
 
-        // Display links if available, otherwise show the no-links message
-        if (links.length > 0) {
-            links.forEach((link) => {
-                // Determine the logo based on the link (you can improve this matching logic as per your needs)
-                let logoUrl = "";
-                
-                if (link.includes("youtube")) {
+        // Match links with corresponding logos
+        if (link.includes("youtube.com") || link.includes("youtu.be")) {
             logoUrl = logoMapping.youtube;
         } else if (link.includes("facebook")) {
             logoUrl = logoMapping.facebook;
@@ -124,7 +123,6 @@ const logoMapping = {
         } else if (link.includes("tinder")) {
             logoUrl = logoMapping.tinder;
         }
-
                 // Create the link element with a logo
                 const linkElement = document.createElement('div');
                 linkElement.classList.add('link-item');
