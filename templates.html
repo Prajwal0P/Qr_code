@@ -3,29 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Templates Page</title>
+    <title>Templates</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #0078d4;
+        }
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-container img {
+            max-width: 250px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>QR Code from Generator</h1>
-    <div id="qrCodeContainer">
-        <img id="qrCodeImage" alt="QR Code" />
+    <h1>Your Template</h1>
+    <div class="qr-container">
+        <!-- QR Code will be displayed here -->
+        <img id="qrCodeImage" src="" alt="Generated QR Code">
     </div>
 
     <script>
-// Retrieve the Blob URL from the query string
-const urlParams = new URLSearchParams(window.location.search);
-const qrCodeBlobURL = urlParams.get('qrCode');
+        // Get the QR code image URL from localStorage
+        const qrImageUrl = localStorage.getItem('generatedQRCode');
 
-// If qrCodeBlobURL exists, set it as the image source
-if (qrCodeBlobURL) {
-    const qrCodeImage = document.getElementById('qrCodeImage');
-    qrCodeImage.src = qrCodeBlobURL;  // Set the image source to the Blob URL
-} else {
-    console.log("No QR code found in the URL");
-}
-
-}
-
+        // If the QR code exists, display it
+        if (qrImageUrl) {
+            document.getElementById('qrCodeImage').src = qrImageUrl;
+        } else {
+            alert("No QR code found.");
+        }
     </script>
 </body>
 </html>
