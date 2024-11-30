@@ -261,7 +261,7 @@
             <div id="qrcode" class="qr-code"></div>
             <div class="button-container">
                 <button class="btn btn-download hidden" id="downloadButton" onclick="downloadQRCode()">Download QR Code</button>
-                <button class="btn btn-templates hidden" id="templatesButton" onclick="window.location.href='https://Prajwal0P.github.io/Qr_code/templates.html'">Templates</button>
+                <button class="btn btn-templates hidden" id="templatesButton" onclick="window.location.href='test.html'">Templates</button>
 
             </div>
         </div>
@@ -391,8 +391,6 @@ const linkInput = document.getElementById('linkInput');
 linkInput.addEventListener('blur', function() {
     validateLink('linkInput', 'linkedin'); // Change 'linkedin' to the appropriate type
 });
-
-
 function generateQRCode() {
     // Get the link values from the input fields
     const link1 = document.getElementById('link1').value;
@@ -440,22 +438,22 @@ function generateQRCode() {
         correctLevel: QRCode.CorrectLevel.H // High error correction level
     });
 
+  
+            // Save the QR code as a base64 image in localStorage
+            const qrImage = qrCodeElement.querySelector('img');
+            if (qrImage) {
+                const qrImageUrl = qrImage.src;
+                console.log("Saving QR Code to localStorage:", qrImageUrl);  // Check the URL in the console
+                localStorage.setItem('generatedQRCode', qrImageUrl);
+            } else {
+                console.error('QR code image not found.');
+            }
+
     // Show the QR code box and buttons after generating the QR code
     document.getElementById('qrBox').style.display = 'flex'; // Change to flex to show
     document.getElementById('downloadButton').classList.remove('hidden');
     document.getElementById('templatesButton').classList.remove('hidden');
 }
-
-
-// Assuming qrElement is the generated QR code image element
-const qrCodeDataURL = qrElement.toDataURL();  // Get QR code data URL
-
-// Create a URL with the QR code data encoded in the query string
-const templatesPageURL = `templates.html?qrCode=${encodeURIComponent(qrCodeDataURL)}`;
-
-// Redirect to templates.html with the QR code data URL as a query parameter
-window.location.href = templatesPageURL;
-
 
 
 
